@@ -1,1 +1,668 @@
-[]
+[
+    {
+        "id": "a850bca680aa7206",
+        "type": "tab",
+        "label": "SALATIGA",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5a6dd8a701a64ce7",
+        "type": "mqtt-broker",
+        "name": "MQTT SALATIGA",
+        "broker": "10.71.3.27",
+        "port": "1884",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "76db9150459da0db",
+        "type": "MySQLdatabase",
+        "name": "iot_slt",
+        "host": "10.71.3.27",
+        "port": "3306",
+        "db": "iot_slt",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "fae6fc6b5acf089c",
+        "type": "websocket-listener",
+        "path": "/ws/sensor_realtime/latest",
+        "wholemsg": "false"
+    },
+    {
+        "id": "f775e65ba0493565",
+        "type": "json",
+        "z": "a850bca680aa7206",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 510,
+        "y": 80,
+        "wires": [
+            [
+                "3e42471de8ff3207",
+                "974613e01bea10df"
+            ]
+        ]
+    },
+    {
+        "id": "2fce901cabfe66d0",
+        "type": "mqtt in",
+        "z": "a850bca680aa7206",
+        "name": "MQTT",
+        "topic": "data/301/#",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "5a6dd8a701a64ce7",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 290,
+        "y": 80,
+        "wires": [
+            [
+                "f775e65ba0493565",
+                "464eceb50cd2dcb7",
+                "81e6c6130d508976"
+            ]
+        ]
+    },
+    {
+        "id": "464eceb50cd2dcb7",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "Debug0",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "9d396dfba006640c",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "insert sensor_history per30mnt",
+        "func": "// Function Node: agregasi 30 menit menggunakan WAKTU LOKAL (Asia/Jakarta / server local)\nlet now = new Date();\n\n// floor ke kelipatan 30 menit local\nlet bucketStart = new Date(now);\nbucketStart.setMinutes(Math.floor(bucketStart.getMinutes() / 30) * 30);\nbucketStart.setSeconds(0);\nbucketStart.setMilliseconds(0);\n\n// format local ke YYYY-MM-DD HH:mm:ss\nfunction pad(n){ return n.toString().padStart(2, '0'); }\nfunction formatLocal(d){\n  return d.getFullYear() + '-' +\n         pad(d.getMonth()+1) + '-' +\n         pad(d.getDate()) + ' ' +\n         pad(d.getHours()) + ':' +\n         pad(d.getMinutes()) + ':' +\n         pad(d.getSeconds());\n}\nlet bucketStr = formatLocal(bucketStart);\n\nmsg.topic = `\nINSERT INTO sensor_history (plc_code, sensor_code, value, \\`timestamp\\`)\nSELECT \n    plc_code,\n    sensor_code,\n    AVG(value) AS value,\n    '${bucketStr}' AS \\`timestamp\\`\nFROM sensor_realtime\nWHERE \\`timestamp\\` >= '${bucketStr}'\n  AND \\`timestamp\\` < DATE_ADD('${bucketStr}', INTERVAL 30 MINUTE)\nGROUP BY plc_code, sensor_code\nON DUPLICATE KEY UPDATE value = VALUES(value);\n`;\n\nnode.warn(msg.topic);\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 160,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "b4962c9b1464657c",
+        "type": "inject",
+        "z": "a850bca680aa7206",
+        "name": "Inject per30mnt",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "1800",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 390,
+        "y": 160,
+        "wires": [
+            [
+                "9d396dfba006640c"
+            ]
+        ]
+    },
+    {
+        "id": "1b5206eea885dcbd",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Auto delete sensor_realtime > 2 pekan",
+        "func": "msg.topic = \"DELETE FROM sensor_realtime WHERE timestamp < NOW() - INTERVAL 14 DAY\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 220,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "2560ed92a87f6196",
+        "type": "inject",
+        "z": "a850bca680aa7206",
+        "name": "Inject per hari",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "10 00 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 400,
+        "y": 220,
+        "wires": [
+            [
+                "1b5206eea885dcbd"
+            ]
+        ]
+    },
+    {
+        "id": "69863482d68897f3",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "MQTT → Realtime DB",
+        "info": " - Mendengarkan data sensor dari MQTT broker.\n - Parse payload dan insert ke tabel sensor_realtime.\n - Tujuan: menyimpan data mentah (realtime, high-resolution).",
+        "x": 100,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "82cc047ad6251934",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "30 Menit → Tabel History",
+        "info": " - Inject node jalan setiap 30 menit.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_history.\n - Tujuan: menyimpan data jangka panjang dalam resolusi lebih rendah.",
+        "x": 110,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "67ef64ed3c8b8855",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Daily Cleanup Data > 14 Hari",
+        "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
+        "x": 120,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "504bec7873ced6d6",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Alert",
+        "info": "",
+        "x": 50,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "f08575dbb1ec819f",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "Debug1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "48639c479673093b",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "76db9150459da0db",
+        "name": "SLT_LIVE",
+        "x": 1160,
+        "y": 160,
+        "wires": [
+            [
+                "f08575dbb1ec819f"
+            ]
+        ]
+    },
+    {
+        "id": "974613e01bea10df",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "Debug2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "3e42471de8ff3207",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "insert tabel sensor_realtime",
+        "func": "// ======================================================\n// PARSE MQTT TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload      = msg.payload || {};\nlet sensor_code  = (payload._groupName || \"\").toString().trim();   // IMPORTANT FIX\nlet timestamp    = payload._terminalTime;\nlet rawValue     = payload.data;\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\n// ======================================================\n// GLOBAL STATE\n// ======================================================\nlet lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};;\n\nconst key = `${plc_code}/${sensor_code}`;\nconst nowMs = Date.now();\n\n\n// ======================================================\n// UPDATE LAST SEEN TIME\n// ======================================================\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n\n// ======================================================\n// ONLINE LOGGING (only once per online session)\n// ======================================================\nif (statusSensor[sensorKey] !== \"online\") {\n\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n\n    return {\n        topic: `\n            INSERT INTO sensor_log \n            (plc_code, sensor_code, status, event_time)\n            VALUES ('${plc_code}', '${sensor_code}', '1', '${timestamp}');\n        `\n    };\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueUpdate;\n\nswitch (measurement_code) {\n    case \"01\": valueUpdate = parseFloat(rawValue) / 1000; break;\n    case \"02\":\n    case \"03\":\n    case \"04\": valueUpdate = parseFloat(rawValue) / 10; break;\n    default:   valueUpdate = parseFloat(rawValue);\n}\n\n\n// ======================================================\n// INSERT REALTIME\n// ======================================================\nmsg.topic = `\n    INSERT INTO sensor_realtime\n    (plc_code, sensor_code, value, timestamp)\n    VALUES ('${plc_code}', '${sensor_code}', ${valueUpdate}, '${timestamp}');\n`;\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 80,
+        "wires": [
+            [
+                "48639c479673093b",
+                "1e522e938ab13de8"
+            ]
+        ]
+    },
+    {
+        "id": "197658740bcf179c",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Detect Timeout (Offline)",
+        "func": "let lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n\nlet timeoutMs = 65000; // interval PLC = 1 menit → timeout 65 detik\nlet now = Date.now();\n\nlet queries = [];\n\nfor (let key in lastSeenSensor) {\n    let last = lastSeenSensor[key];\n\n    if (now - last > timeoutMs) {\n\n        if (statusSensor[key] !== \"offline\") {\n            statusSensor[key] = \"offline\";\n            flow.set(\"statusSensor\", statusSensor);\n\n            let [plc_code, sensor_code] = key.split(\"/\");\n\n            queries.push(`\n                INSERT INTO sensor_log \n                (plc_code, sensor_code, status, event_time)\n                VALUES ('${plc_code}', '${sensor_code}', '0', NOW());\n            `);\n        }\n    }\n}\n\nif (queries.length > 0) {\n    return { topic: queries.join(\"\\n\") };\n}\n\nreturn null;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 340,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "6bef25e7301fb164",
+        "type": "inject",
+        "z": "a850bca680aa7206",
+        "name": "Timer check offline (1s)",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "payloadType": "date",
+        "x": 430,
+        "y": 340,
+        "wires": [
+            [
+                "197658740bcf179c"
+            ]
+        ]
+    },
+    {
+        "id": "60faa96c9c46c083",
+        "type": "inject",
+        "z": "a850bca680aa7206",
+        "name": "Inject per hari",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "10 00 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 400,
+        "y": 280,
+        "wires": [
+            [
+                "5a3d6822d8636757"
+            ]
+        ]
+    },
+    {
+        "id": "5a3d6822d8636757",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Auto delete sensor_log > 2 pekan",
+        "func": "msg.topic = \"DELETE FROM sensor_log WHERE event_time < NOW() - INTERVAL 14 DAY\";\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 280,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "1e522e938ab13de8",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "Debug3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "c79ee0cc949ddd4c",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "REST API → Latest Sensor Data",
+        "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
+        "x": 130,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "4643bb2ed93ca764",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
+        "info": "",
+        "x": 230,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "ccad7752d95aa5d9",
+        "type": "websocket out",
+        "z": "a850bca680aa7206",
+        "name": "",
+        "server": "fae6fc6b5acf089c",
+        "client": "",
+        "x": 1070,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "d2f15c42ebee4a71",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "MQTT to Websocket",
+        "func": "// Contoh: msg.topic = \"data/07/RT0201/7020449001020126076\"\n// Ambil sensor code dari topik MQTT\nconst topicParts = msg.topic.split(\"/\");\nconst sensorCode = topicParts[2]; // \"RT0201\"\n\n// Ambil data dari payload\nconst data = msg.payload;\n\n// Pastikan payload valid\nif (!data || !sensorCode) return null;\n\n// Buat pesan bersih untuk WebSocket\nmsg.payload = {\n  sensor_code: sensorCode,\n  value: Number(data.value),\n  timestamp: data._terminalTime\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 520,
+        "wires": [
+            [
+                "ccad7752d95aa5d9"
+            ]
+        ]
+    },
+    {
+        "id": "81e6c6130d508976",
+        "type": "json",
+        "z": "a850bca680aa7206",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 590,
+        "y": 520,
+        "wires": [
+            [
+                "d2f15c42ebee4a71"
+            ]
+        ]
+    },
+    {
+        "id": "1270713f67d17402",
+        "type": "http in",
+        "z": "a850bca680aa7206",
+        "name": "",
+        "url": "/api/sensor_history/insert",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 630,
+        "y": 600,
+        "wires": [
+            [
+                "c02b0ea0c4583efd"
+            ]
+        ]
+    },
+    {
+        "id": "c02b0ea0c4583efd",
+        "type": "json",
+        "z": "a850bca680aa7206",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 870,
+        "y": 600,
+        "wires": [
+            [
+                "b291ee43fbaafd45"
+            ]
+        ]
+    },
+    {
+        "id": "b291ee43fbaafd45",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Insert ke sensor_history dari button simpan",
+        "func": "// function node — output ke MySQL (pastikan function node memiliki 3 output seperti sebelumnya)\nif (typeof msg.payload === \"string\") {\n    try { msg.payload = JSON.parse(msg.payload); } \n    catch (e) {\n        node.error(\"Invalid JSON\", msg);\n        msg.statusCode = 400; msg.payload = { error: \"Invalid JSON\" };\n        return [null, msg, null];\n    }\n}\n\nconst data = msg.payload;\nif (!data.sensor_code || data.value === undefined) {\n    msg.statusCode = 400; msg.payload = { error: \"sensor_code dan value wajib diisi\" };\n    return [null, msg, null];\n}\n\n// Ambil timestamp; jika tidak ada gunakan now\nlet ts = data.timestamp || new Date().toISOString();\n// ubah ISO -> \"YYYY-MM-DD HH:MM:SS\"\nts = ts.replace('T', ' ').replace('Z', '').split('.')[0]; // menghapus ms\n\n// buat query (nilai numeric tanpa quotes)\nmsg.topic = `\n  INSERT INTO sensor_history (sensor_code, value)\n  VALUES ('${data.sensor_code}', ${Number(data.value)})\n`;\n\nnode.warn(\"Query: \" + msg.topic);\nreturn [msg, null, msg];\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1150,
+        "y": 600,
+        "wires": [
+            [
+                "605ea1f6543efe0a"
+            ]
+        ]
+    },
+    {
+        "id": "93ea4af6d0509d68",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Payload ke Paperless",
+        "func": "msg.payload = { success: true, message: \"Data berhasil disimpan\" };\nmsg.statusCode = 200;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1660,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6d3b14db62fccb21",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Websocket → Latest Sensor Data",
+        "info": "",
+        "x": 140,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "824f1f8b95116cd3",
+        "type": "http response",
+        "z": "a850bca680aa7206",
+        "name": "HTTP Response",
+        "statusCode": "",
+        "headers": {},
+        "x": 1300,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "b9b718c0bb38497d",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Setting Timezone",
+        "func": "let rows = msg.payload;\n\n// Pastikan hasil dari MySQL berupa array\nif (!Array.isArray(rows)) {\n    node.warn(\"Payload bukan array, isi payload: \" + JSON.stringify(rows));\n    msg.payload = {\n        status: \"error\",\n        message: \"Data dari database tidak berupa array\",\n        raw_payload: rows\n    };\n    return msg;\n}\n\n// Format response API\nmsg.payload = {\n    status: \"success\",\n    timestamp_api: new Date().toLocaleString(\"id-ID\", { timeZone: \"Asia/Jakarta\" }),\n    sensors: rows.map(r => {\n        let timestamp = new Date(r.timestamp);\n        return {\n            plc_code: r.plc_code, // kalau kolom ini ada di tabel\n            sensor_code: r.sensor_code,\n            value: r.value,\n            timestamp: timestamp.toLocaleString(\"id-ID\", { timeZone: \"Asia/Jakarta\" })\n        };\n    })\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1050,
+        "y": 420,
+        "wires": [
+            [
+                "824f1f8b95116cd3"
+            ]
+        ]
+    },
+    {
+        "id": "9d264b2f909b8867",
+        "type": "http in",
+        "z": "a850bca680aa7206",
+        "name": "API sensor_realtime",
+        "url": "/api/sensor_realtime/latest-03/:sensor?",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 410,
+        "y": 420,
+        "wires": [
+            [
+                "88fbb53b1ce021e7"
+            ]
+        ]
+    },
+    {
+        "id": "88fbb53b1ce021e7",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Query Latest",
+        "func": "// Ambil sensor dari URL parameter\nconst sensorCode = msg.req.params.sensor;\n\nlet sql = `\nSELECT sr.plc_code, sr.sensor_code, sr.value, sr.timestamp\nFROM sensor_realtime sr\nINNER JOIN (\n    SELECT sensor_code, MAX(timestamp) AS latest_timestamp\n    FROM sensor_realtime\n    GROUP BY sensor_code\n) t\nON sr.sensor_code = t.sensor_code\nAND sr.timestamp = t.latest_timestamp\n`;\n\nif (sensorCode) {\n    sql += ` WHERE sr.sensor_code = '${sensorCode}'`;\n}\n\nsql += \" ORDER BY sr.sensor_code;\";\n\nmsg.topic = sql;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 420,
+        "wires": [
+            [
+                "a1042de7bf32f7c3"
+            ]
+        ]
+    },
+    {
+        "id": "a1042de7bf32f7c3",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "76db9150459da0db",
+        "name": "SLT_LIVE",
+        "x": 840,
+        "y": 420,
+        "wires": [
+            [
+                "b9b718c0bb38497d"
+            ]
+        ]
+    },
+    {
+        "id": "605ea1f6543efe0a",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "76db9150459da0db",
+        "name": "SLT_LIVE",
+        "x": 1440,
+        "y": 600,
+        "wires": [
+            [
+                "93ea4af6d0509d68"
+            ]
+        ]
+    }
+]
