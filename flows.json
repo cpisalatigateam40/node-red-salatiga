@@ -62,8 +62,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 510,
-        "y": 80,
+        "x": 550,
+        "y": 180,
         "wires": [
             [
                 "3e42471de8ff3207",
@@ -84,8 +84,8 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 290,
-        "y": 80,
+        "x": 330,
+        "y": 180,
         "wires": [
             [
                 "f775e65ba0493565",
@@ -107,8 +107,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 500,
-        "y": 20,
+        "x": 540,
+        "y": 120,
         "wires": []
     },
     {
@@ -123,8 +123,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 670,
-        "y": 160,
+        "x": 710,
+        "y": 260,
         "wires": [
             [
                 "48639c479673093b"
@@ -148,8 +148,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 390,
-        "y": 160,
+        "x": 430,
+        "y": 260,
         "wires": [
             [
                 "9d396dfba006640c"
@@ -168,8 +168,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
-        "y": 220,
+        "x": 730,
+        "y": 320,
         "wires": [
             [
                 "48639c479673093b"
@@ -193,8 +193,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 400,
-        "y": 220,
+        "x": 440,
+        "y": 320,
         "wires": [
             [
                 "1b5206eea885dcbd"
@@ -207,8 +207,8 @@
         "z": "a850bca680aa7206",
         "name": "MQTT → Realtime DB",
         "info": " - Mendengarkan data sensor dari MQTT broker.\n - Parse payload dan insert ke tabel sensor_realtime.\n - Tujuan: menyimpan data mentah (realtime, high-resolution).",
-        "x": 100,
-        "y": 80,
+        "x": 140,
+        "y": 180,
         "wires": []
     },
     {
@@ -217,8 +217,8 @@
         "z": "a850bca680aa7206",
         "name": "30 Menit → Tabel History",
         "info": " - Inject node jalan setiap 30 menit.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_history.\n - Tujuan: menyimpan data jangka panjang dalam resolusi lebih rendah.",
-        "x": 110,
-        "y": 160,
+        "x": 150,
+        "y": 260,
         "wires": []
     },
     {
@@ -227,8 +227,8 @@
         "z": "a850bca680aa7206",
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
-        "x": 120,
-        "y": 260,
+        "x": 160,
+        "y": 360,
         "wires": []
     },
     {
@@ -237,8 +237,8 @@
         "z": "a850bca680aa7206",
         "name": "Alert",
         "info": "",
-        "x": 50,
-        "y": 340,
+        "x": 90,
+        "y": 440,
         "wires": []
     },
     {
@@ -254,8 +254,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 160,
+        "x": 1380,
+        "y": 260,
         "wires": []
     },
     {
@@ -263,9 +263,9 @@
         "type": "mysql",
         "z": "a850bca680aa7206",
         "mydb": "76db9150459da0db",
-        "name": "SLT_LIVE",
-        "x": 1160,
-        "y": 160,
+        "name": "database",
+        "x": 1200,
+        "y": 260,
         "wires": [
             [
                 "f08575dbb1ec819f"
@@ -285,8 +285,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 740,
-        "y": 20,
+        "x": 780,
+        "y": 120,
         "wires": []
     },
     {
@@ -301,8 +301,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 80,
+        "x": 840,
+        "y": 180,
         "wires": [
             [
                 "48639c479673093b",
@@ -322,8 +322,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 750,
-        "y": 340,
+        "x": 790,
+        "y": 440,
         "wires": [
             [
                 "48639c479673093b"
@@ -349,8 +349,8 @@
         "onceDelay": "2",
         "topic": "",
         "payloadType": "date",
-        "x": 430,
-        "y": 340,
+        "x": 470,
+        "y": 440,
         "wires": [
             [
                 "197658740bcf179c"
@@ -374,8 +374,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 400,
-        "y": 280,
+        "x": 440,
+        "y": 380,
         "wires": [
             [
                 "5a3d6822d8636757"
@@ -394,8 +394,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 280,
+        "x": 720,
+        "y": 380,
         "wires": [
             [
                 "48639c479673093b"
@@ -415,8 +415,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1040,
-        "y": 40,
+        "x": 1080,
+        "y": 140,
         "wires": []
     },
     {
@@ -425,8 +425,8 @@
         "z": "a850bca680aa7206",
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
-        "x": 130,
-        "y": 420,
+        "x": 170,
+        "y": 520,
         "wires": []
     },
     {
@@ -435,8 +435,8 @@
         "z": "a850bca680aa7206",
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
-        "x": 230,
-        "y": 600,
+        "x": 270,
+        "y": 700,
         "wires": []
     },
     {
@@ -446,8 +446,8 @@
         "name": "",
         "server": "fae6fc6b5acf089c",
         "client": "",
-        "x": 1070,
-        "y": 520,
+        "x": 1110,
+        "y": 620,
         "wires": []
     },
     {
@@ -462,8 +462,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 520,
+        "x": 840,
+        "y": 620,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -478,8 +478,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 590,
-        "y": 520,
+        "x": 630,
+        "y": 620,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -496,8 +496,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 630,
-        "y": 600,
+        "x": 670,
+        "y": 700,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -512,8 +512,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 870,
-        "y": 600,
+        "x": 910,
+        "y": 700,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -532,8 +532,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1150,
-        "y": 600,
+        "x": 1190,
+        "y": 700,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -552,8 +552,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1660,
-        "y": 600,
+        "x": 1700,
+        "y": 700,
         "wires": [
             []
         ]
@@ -564,8 +564,8 @@
         "z": "a850bca680aa7206",
         "name": "Websocket → Latest Sensor Data",
         "info": "",
-        "x": 140,
-        "y": 520,
+        "x": 180,
+        "y": 620,
         "wires": []
     },
     {
@@ -575,8 +575,8 @@
         "name": "HTTP Response",
         "statusCode": "",
         "headers": {},
-        "x": 1300,
-        "y": 420,
+        "x": 1340,
+        "y": 520,
         "wires": []
     },
     {
@@ -591,8 +591,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1050,
-        "y": 420,
+        "x": 1090,
+        "y": 520,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -609,8 +609,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 410,
-        "y": 420,
+        "x": 450,
+        "y": 520,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -629,8 +629,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 630,
-        "y": 420,
+        "x": 670,
+        "y": 520,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -642,9 +642,9 @@
         "type": "mysql",
         "z": "a850bca680aa7206",
         "mydb": "76db9150459da0db",
-        "name": "SLT_LIVE",
-        "x": 840,
-        "y": 420,
+        "name": "database",
+        "x": 880,
+        "y": 520,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -656,13 +656,23 @@
         "type": "mysql",
         "z": "a850bca680aa7206",
         "mydb": "76db9150459da0db",
-        "name": "SLT_LIVE",
-        "x": 1440,
-        "y": 600,
+        "name": "database",
+        "x": 1480,
+        "y": 700,
         "wires": [
             [
                 "93ea4af6d0509d68"
             ]
         ]
+    },
+    {
+        "id": "76efd0daf1d7c3df",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "######################## README (Buka ini terlebih dahulu) ########################",
+        "info": "Jika sudah berhasil clone, beberapa node harus diubah, antara lain :\n 1. **MQTT** = sesuaikan dengan kode plant. \n   Format : `data/<kode-plant>/#`\n 2. **Database** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tsb menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Contoh : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n\n**Selain 3 node diatas, tidak perlu diubah, kecuali tahap development**",
+        "x": 370,
+        "y": 40,
+        "wires": []
     }
 ]
