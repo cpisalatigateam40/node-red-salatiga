@@ -2,7 +2,7 @@
     {
         "id": "a850bca680aa7206",
         "type": "tab",
-        "label": "SALATIGA",
+        "label": "Dev",
         "disabled": false,
         "info": "",
         "env": []
@@ -10,8 +10,8 @@
     {
         "id": "5a6dd8a701a64ce7",
         "type": "mqtt-broker",
-        "name": "MQTT SALATIGA",
-        "broker": "10.71.3.27",
+        "name": "",
+        "broker": "10.68.1.220",
         "port": "1884",
         "clientid": "",
         "autoConnect": true,
@@ -41,10 +41,10 @@
     {
         "id": "76db9150459da0db",
         "type": "MySQLdatabase",
-        "name": "iot_slt",
-        "host": "10.71.3.27",
+        "name": "iot_sda",
+        "host": "127.0.0.1",
         "port": "3306",
-        "db": "iot_slt",
+        "db": "iot_sda",
         "tz": "",
         "charset": "UTF8"
     },
@@ -66,8 +66,7 @@
         "y": 180,
         "wires": [
             [
-                "3e42471de8ff3207",
-                "974613e01bea10df"
+                "3e42471de8ff3207"
             ]
         ]
     },
@@ -76,7 +75,7 @@
         "type": "mqtt in",
         "z": "a850bca680aa7206",
         "name": "MQTT",
-        "topic": "data/301/#",
+        "topic": "data/07/#",
         "qos": "2",
         "datatype": "auto",
         "broker": "5a6dd8a701a64ce7",
@@ -99,7 +98,7 @@
         "type": "debug",
         "z": "a850bca680aa7206",
         "name": "Debug0",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -115,8 +114,9 @@
         "id": "9d396dfba006640c",
         "type": "function",
         "z": "a850bca680aa7206",
+        "d": true,
         "name": "insert sensor_history per30mnt",
-        "func": "// --- FUNCTION NODE: AGREGASI 30 MENIT \n// Fitur:\n// 1. AVG \n// 2. Timestamp End-of-Period\n// 3. Support Offline Cache hingga 7 HARI \n// 4. Realtime Update\n\nmsg.topic = `\nINSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\nSELECT\n    plc_code,\n    sensor_code,\n   \n    -- RATA-RATA SAJA\n    AVG(value) AS value,\n\n    -- LOGIKA TIMESTAMP (PEMBULATAN 30 MENIT)\n    FROM_UNIXTIME(\n        CEILING(UNIX_TIMESTAMP(timestamp) / 1800) * 1800\n    ) AS time_bucket\n\nFROM sensor_realtime\n\nWHERE\n    -- Kita ambil data mundur sampai 7 HARI (1 Pekan) ke belakang.\n    -- Jadi kalau data dari 3 hari lalu baru masuk sekarang, dia tetap akan diproses.\n    timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\n\nGROUP BY plc_code, sensor_code, time_bucket\n\n-- LIVE UPDATE\nON DUPLICATE KEY UPDATE\n    value = VALUES(value);\n`;\n\nreturn msg;\n",
+        "func": "// --- FUNCTION NODE: AGREGASI 30 MENIT \n// Fitur:\n// 1. AVG \n// 2. Timestamp End-of-Period\n// 3. Support Offline Cache hingga 7 HARI \n// 4. Realtime Update\nlet interval = flow.get(\"intervalHistory\") || 30;\nlet intervalSec = interval * 60;\n\nmsg.topic = `\nINSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\nSELECT\n    plc_code,\n    sensor_code,\n   \n    -- RATA-RATA SAJA\n    AVG(value) AS value,\n\n    -- LOGIKA TIMESTAMP (PEMBULATAN 30 MENIT)\n    FROM_UNIXTIME(\n        CEILING(UNIX_TIMESTAMP(timestamp) / ${intervalSec}) * ${intervalSec}\n    ) AS time_bucket\n\nFROM sensor_realtime\n\nWHERE\n    -- Kita ambil data mundur sampai 7 HARI (1 Pekan) ke belakang.\n    -- Jadi kalau data dari 3 hari lalu baru masuk sekarang, dia tetap akan diproses.\n    timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\n\nGROUP BY plc_code, sensor_code, time_bucket\n\n-- LIVE UPDATE\nON DUPLICATE KEY UPDATE\n    value = VALUES(value);\n`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -127,7 +127,7 @@
         "y": 260,
         "wires": [
             [
-                "48639c479673093b"
+                "2b5ee52656dc3dcd"
             ]
         ]
     },
@@ -135,20 +135,21 @@
         "id": "b4962c9b1464657c",
         "type": "inject",
         "z": "a850bca680aa7206",
-        "name": "Inject per30mnt",
+        "d": true,
+        "name": "Inject per1mnt",
         "props": [
             {
                 "p": "payload"
             }
         ],
-        "repeat": "1800",
+        "repeat": "60",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 430,
+        "x": 420,
         "y": 260,
         "wires": [
             [
@@ -285,7 +286,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 780,
+        "x": 1120,
         "y": 120,
         "wires": []
     },
@@ -294,7 +295,7 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "insert tabel sensor_realtime",
-        "func": "// ======================================================\n// PARSE MQTT TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle;   // undefined jika bukan cycle sensor\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\n\n// ======================================================\n// GLOBAL STATE (status online / lastSeen)\n// ======================================================\nlet lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\n// Update last seen\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n\n// ======================================================\n// ONLINE FIRST LOG\n// ======================================================\nif (statusSensor[sensorKey] !== \"online\") {\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n\n    return {\n        topic: `\n            INSERT INTO sensor_log \n            (plc_code, sensor_code, status, event_time)\n            VALUES ('${plc_code}', '${sensor_code}', '1', '${timestamp}');\n        `\n    };\n}\n\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\n\nswitch (measurement_code) {\n    case \"01\": valueConverted = parseFloat(rawValue) / 1000; break;\n    case \"02\":\n    case \"03\":\n    case \"04\": valueConverted = parseFloat(rawValue) / 10; break;\n    default: valueConverted = parseFloat(rawValue);\n}\n\n\n// ======================================================\n// SENSOR TYPE CHECK (cycle atau tidak)\n// ======================================================\nlet isCycleSensor = (cycleValue !== undefined && cycleValue !== null);\n\n\n// ======================================================\n// BUILD SQL FOR 1 TABLE\n// ======================================================\nlet finalCycle = isCycleSensor ? parseInt(cycleValue, 10) || 0 : null;\n\nmsg.topic = `\n    INSERT INTO sensor_realtime\n    (plc_code, sensor_code, value, data_cycle, timestamp)\n    VALUES (\n        '${plc_code}', \n        '${sensor_code}', \n        ${valueConverted}, \n        ${finalCycle === null ? 'NULL' : finalCycle}, \n        '${timestamp}'\n    );\n`;\n\nreturn msg;\n",
+        "func": "// ======================================================\n// PARSE MQTT TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle;\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\n\n// ======================================================\n// GLOBAL STATE (ONLINE / LAST SEEN)\n// ======================================================\nlet lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\n// update last seen\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n\n// ======================================================\n// ONLINE FIRST LOG\n// ======================================================\nif (statusSensor[sensorKey] !== \"online\") {\n\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n\n    return {\n        topic: `\n            INSERT INTO sensor_log \n            (plc_code, sensor_code, status, timestamp)\n            VALUES ('${plc_code}', '${sensor_code}', '1', '${timestamp}');\n        `\n    };\n}\n\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\n\nswitch (measurement_code) {\n    case \"01\": valueConverted = parseFloat(rawValue) / 1000; break;\n    case \"02\":\n    case \"03\":\n    case \"04\": valueConverted = parseFloat(rawValue) / 10; break;\n    default: valueConverted = parseFloat(rawValue);\n}\n\n\n// ======================================================\n// SENSOR TYPE CHECK\n// ======================================================\nlet isCycleSensor = (cycleValue !== undefined && cycleValue !== null);\nlet finalCycle = isCycleSensor ? parseInt(cycleValue, 10) || 0 : null;\n\n\n// ======================================================\n// SIMPAN INTERVAL PER SENSOR (DINAMIS)\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\nlet intervalMin = parseInt(payload.interval) || 30;\nlet intervalMs = intervalMin * 60 * 1000;\n\nintervalMap[sensorKey] = intervalMin;\nflow.set(\"intervalMap\", intervalMap);\n\n\n// ======================================================\n// INSERT REALTIME\n// ======================================================\nlet queryRealtime = `\n    INSERT INTO sensor_realtime\n    (plc_code, sensor_code, value, data_cycle, timestamp)\n    VALUES (\n        '${plc_code}', \n        '${sensor_code}', \n        ${valueConverted}, \n        ${finalCycle === null ? 'NULL' : finalCycle}, \n        '${timestamp}'\n    );\n`;\n\n\n// ======================================================\n// CEK APAKAH SUDAH WAKTUNYA INSERT HISTORY\n// ======================================================\nlet lastInsert = lastInsertMap[sensorKey] || 0;\n\nif (now - lastInsert >= intervalMs) {\n\n    lastInsertMap[sensorKey] = now;\n    flow.set(\"lastInsertMap\", lastInsertMap);\n\n    let intervalSec = intervalMin * 60;\n\n    let queryHistory = `\n        INSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\n        SELECT\n            plc_code,\n            sensor_code,\n            AVG(value),\n            FROM_UNIXTIME(\n                CEILING(UNIX_TIMESTAMP(timestamp) / ${intervalSec}) * ${intervalSec}\n            )\n        FROM sensor_realtime\n        WHERE sensor_code = '${sensor_code}'\n        AND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\n        GROUP BY plc_code, sensor_code, timestamp\n        ON DUPLICATE KEY UPDATE value = VALUES(value);\n    `;\n\n    msg.topic = queryRealtime + \"\\n\" + queryHistory;\n    return msg;\n}\n\n\n// ======================================================\n// DEFAULT: HANYA INSERT REALTIME\n// ======================================================\nmsg.topic = queryRealtime;\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -306,7 +307,7 @@
         "wires": [
             [
                 "48639c479673093b",
-                "1e522e938ab13de8"
+                "974613e01bea10df"
             ]
         ]
     },
@@ -401,23 +402,6 @@
                 "48639c479673093b"
             ]
         ]
-    },
-    {
-        "id": "1e522e938ab13de8",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "Debug3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1080,
-        "y": 140,
-        "wires": []
     },
     {
         "id": "c79ee0cc949ddd4c",
@@ -673,6 +657,37 @@
         "info": "Jika sudah berhasil clone, beberapa node harus diubah, antara lain :\n 1. **MQTT** = sesuaikan dengan kode plant. \n   Format : `data/<kode-plant>/#`\n   Contoh : `data/01/#`\n 2. **Database** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tsb menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n\n**Selain 3 node diatas, tidak perlu diubah, kecuali tahap development**",
         "x": 370,
         "y": 40,
+        "wires": []
+    },
+    {
+        "id": "2b5ee52656dc3dcd",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "76db9150459da0db",
+        "name": "database",
+        "x": 1200,
+        "y": 340,
+        "wires": [
+            [
+                "e68336930403086b"
+            ]
+        ]
+    },
+    {
+        "id": "e68336930403086b",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "Debug3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 340,
         "wires": []
     }
 ]
