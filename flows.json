@@ -3,7 +3,7 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Dev",
-        "disabled": true,
+        "disabled": false,
         "info": "",
         "env": []
     },
@@ -594,7 +594,7 @@
         "type": "comment",
         "z": "a850bca680aa7206",
         "name": "######################## README (Buka ini terlebih dahulu) ########################",
-        "info": "Jika sudah berhasil clone, beberapa node harus diubah, antara lain :\n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n 2. **Database** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tsb menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. **Nama Flow** : default dari git 'SALATIGA'. Ganti jadi nama plant\n\n**Selain 3 node diatas, tidak perlu diubah, kecuali tahap development**",
+        "info": "Jika sudah berhasil clone, beberapa node harus diubah, antara lain :\n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#` .\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n 2. **Database** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tsb menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. **Nama Flow** : default dari git 'SALATIGA'. Ganti jadi nama plant\n\n**Selain 3 node diatas, tidak perlu diubah, kecuali tahap development**",
         "x": 370,
         "y": 40,
         "wires": []
