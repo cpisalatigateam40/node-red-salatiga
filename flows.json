@@ -62,11 +62,12 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 550,
+        "x": 570,
         "y": 180,
         "wires": [
             [
-                "3e42471de8ff3207"
+                "3e42471de8ff3207",
+                "9d396dfba006640c"
             ]
         ]
     },
@@ -83,77 +84,33 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 330,
+        "x": 390,
         "y": 180,
         "wires": [
             [
                 "f775e65ba0493565",
-                "464eceb50cd2dcb7",
-                "81e6c6130d508976"
+                "81e6c6130d508976",
+                "464eceb50cd2dcb7"
             ]
         ]
-    },
-    {
-        "id": "464eceb50cd2dcb7",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "Debug0",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 540,
-        "y": 120,
-        "wires": []
     },
     {
         "id": "9d396dfba006640c",
         "type": "function",
         "z": "a850bca680aa7206",
-        "d": true,
-        "name": "insert sensor_history per30mnt",
-        "func": "// --- FUNCTION NODE: AGREGASI 30 MENIT \n// Fitur:\n// 1. AVG \n// 2. Timestamp End-of-Period\n// 3. Support Offline Cache hingga 7 HARI \n// 4. Realtime Update\nlet interval = flow.get(\"intervalHistory\") || 30;\nlet intervalSec = interval * 60;\n\nmsg.topic = `\nINSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\nSELECT\n    plc_code,\n    sensor_code,\n   \n    -- RATA-RATA SAJA\n    AVG(value) AS value,\n\n    -- LOGIKA TIMESTAMP (PEMBULATAN 30 MENIT)\n    FROM_UNIXTIME(\n        CEILING(UNIX_TIMESTAMP(timestamp) / ${intervalSec}) * ${intervalSec}\n    ) AS time_bucket\n\nFROM sensor_realtime\n\nWHERE\n    -- Kita ambil data mundur sampai 7 HARI (1 Pekan) ke belakang.\n    -- Jadi kalau data dari 3 hari lalu baru masuk sekarang, dia tetap akan diproses.\n    timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\n\nGROUP BY plc_code, sensor_code, time_bucket\n\n-- LIVE UPDATE\nON DUPLICATE KEY UPDATE\n    value = VALUES(value);\n`;\n\nreturn msg;\n",
+        "name": "insert sensor_history interval",
+        "func": "// ======================================================\n// PARSE ULANG DARI PAYLOAD\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\n\n// ======================================================\n// AMBIL INTERVAL DARI FLOW\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\nlet intervalMin = intervalMap[sensorKey] || parseInt(payload.interval) || 30;\n\nlet intervalMs = intervalMin * 60 * 1000;\nlet intervalSec = intervalMin * 60;\n\nlet lastInsert = lastInsertMap[sensorKey] || 0;\n\n\n// ======================================================\n// CEK INTERVAL\n// ======================================================\nif (now - lastInsert < intervalMs) {\n    return null;\n}\n\n\n// ======================================================\n// UPDATE LAST INSERT\n// ======================================================\nlastInsertMap[sensorKey] = now;\nflow.set(\"lastInsertMap\", lastInsertMap);\n\nmsg.topic = `\nINSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\nSELECT\n    plc_code,\n    sensor_code,\n    AVG(value) AS value,\n    FROM_UNIXTIME(\n        CEILING(UNIX_TIMESTAMP(timestamp) / ${intervalSec}) * ${intervalSec}\n    ) AS time_bucket\nFROM sensor_realtime\nWHERE sensor_code = '${sensor_code}'\nAND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\nGROUP BY plc_code, sensor_code, time_bucket\nON DUPLICATE KEY UPDATE value = VALUES(value);\n`;\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 710,
+        "x": 840,
         "y": 260,
         "wires": [
             [
-                "2b5ee52656dc3dcd"
-            ]
-        ]
-    },
-    {
-        "id": "b4962c9b1464657c",
-        "type": "inject",
-        "z": "a850bca680aa7206",
-        "d": true,
-        "name": "Inject per1mnt",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "60",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 420,
-        "y": 260,
-        "wires": [
-            [
-                "9d396dfba006640c"
+                "48639c479673093b"
             ]
         ]
     },
@@ -169,7 +126,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
+        "x": 770,
         "y": 320,
         "wires": [
             [
@@ -216,9 +173,9 @@
         "id": "82cc047ad6251934",
         "type": "comment",
         "z": "a850bca680aa7206",
-        "name": "30 Menit → Tabel History",
-        "info": " - Inject node jalan setiap 30 menit.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_history.\n - Tujuan: menyimpan data jangka panjang dalam resolusi lebih rendah.",
-        "x": 150,
+        "name": "Interval → Tabel History",
+        "info": " - Inject node jalan setiap interval.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_history.\n - Tujuan: menyimpan data jangka panjang dalam resolusi lebih rendah.",
+        "x": 140,
         "y": 260,
         "wires": []
     },
@@ -229,7 +186,7 @@
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
         "x": 160,
-        "y": 360,
+        "y": 340,
         "wires": []
     },
     {
@@ -274,35 +231,18 @@
         ]
     },
     {
-        "id": "974613e01bea10df",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "Debug2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1120,
-        "y": 120,
-        "wires": []
-    },
-    {
         "id": "3e42471de8ff3207",
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "insert tabel sensor_realtime",
-        "func": "// ======================================================\n// PARSE MQTT TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle;\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\n\n// ======================================================\n// GLOBAL STATE (ONLINE / LAST SEEN)\n// ======================================================\nlet lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\n// update last seen\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n\n// ======================================================\n// ONLINE FIRST LOG\n// ======================================================\nif (statusSensor[sensorKey] !== \"online\") {\n\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n\n    return {\n        topic: `\n            INSERT INTO sensor_log \n            (plc_code, sensor_code, status, timestamp)\n            VALUES ('${plc_code}', '${sensor_code}', '1', '${timestamp}');\n        `\n    };\n}\n\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\n\nswitch (measurement_code) {\n    case \"01\": valueConverted = parseFloat(rawValue) / 1000; break;\n    case \"02\":\n    case \"03\":\n    case \"04\": valueConverted = parseFloat(rawValue) / 10; break;\n    default: valueConverted = parseFloat(rawValue);\n}\n\n\n// ======================================================\n// SENSOR TYPE CHECK\n// ======================================================\nlet isCycleSensor = (cycleValue !== undefined && cycleValue !== null);\nlet finalCycle = isCycleSensor ? parseInt(cycleValue, 10) || 0 : null;\n\n\n// ======================================================\n// SIMPAN INTERVAL PER SENSOR (DINAMIS)\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\nlet intervalMin = parseInt(payload.interval) || 30;\nlet intervalMs = intervalMin * 60 * 1000;\n\nintervalMap[sensorKey] = intervalMin;\nflow.set(\"intervalMap\", intervalMap);\n\n\n// ======================================================\n// INSERT REALTIME\n// ======================================================\nlet queryRealtime = `\n    INSERT INTO sensor_realtime\n    (plc_code, sensor_code, value, data_cycle, timestamp)\n    VALUES (\n        '${plc_code}', \n        '${sensor_code}', \n        ${valueConverted}, \n        ${finalCycle === null ? 'NULL' : finalCycle}, \n        '${timestamp}'\n    );\n`;\n\n\n// ======================================================\n// CEK APAKAH SUDAH WAKTUNYA INSERT HISTORY\n// ======================================================\nlet lastInsert = lastInsertMap[sensorKey] || 0;\n\nif (now - lastInsert >= intervalMs) {\n\n    lastInsertMap[sensorKey] = now;\n    flow.set(\"lastInsertMap\", lastInsertMap);\n\n    let intervalSec = intervalMin * 60;\n\n    let queryHistory = `\n        INSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\n        SELECT\n            plc_code,\n            sensor_code,\n            AVG(value),\n            FROM_UNIXTIME(\n                CEILING(UNIX_TIMESTAMP(timestamp) / ${intervalSec}) * ${intervalSec}\n            )\n        FROM sensor_realtime\n        WHERE sensor_code = '${sensor_code}'\n        AND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\n        GROUP BY plc_code, sensor_code, timestamp\n        ON DUPLICATE KEY UPDATE value = VALUES(value);\n    `;\n\n    msg.topic = queryRealtime + \"\\n\" + queryHistory;\n    return msg;\n}\n\n\n// ======================================================\n// DEFAULT: HANYA INSERT REALTIME\n// ======================================================\nmsg.topic = queryRealtime;\nreturn msg;",
+        "func": "// ======================================================\n// PARSE MQTT TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle;   // undefined jika bukan cycle sensor\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\n\n// ======================================================\n// GLOBAL STATE (status online / lastSeen)\n// ======================================================\nlet lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\nlet intervalMap = flow.get(\"intervalMap\") || {};\nintervalMap[sensorKey] = parseInt(payload.interval) || 30;\nflow.set(\"intervalMap\", intervalMap);\n\n// Update last seen\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n\n// ======================================================\n// ONLINE FIRST LOG\n// ======================================================\nif (statusSensor[sensorKey] !== \"online\") {\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n\n    return {\n        topic: `\n            INSERT INTO sensor_log \n            (plc_code, sensor_code, status, timestamp)\n            VALUES ('${plc_code}', '${sensor_code}', '1', '${timestamp}');\n        `\n    };\n}\n\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\n\nswitch (measurement_code) {\n    case \"01\": valueConverted = parseFloat(rawValue) / 1000; break;\n    case \"02\":\n    case \"03\":\n    case \"04\": valueConverted = parseFloat(rawValue) / 10; break;\n    default: valueConverted = parseFloat(rawValue);\n}\n\n\n// ======================================================\n// SENSOR TYPE CHECK (cycle atau tidak)\n// ======================================================\nlet isCycleSensor = (cycleValue !== undefined && cycleValue !== null);\n\n\n// ======================================================\n// BUILD SQL FOR 1 TABLE\n// ======================================================\nlet finalCycle = isCycleSensor ? parseInt(cycleValue, 10) || 0 : null;\n\nmsg.topic = `\n    INSERT INTO sensor_realtime\n    (plc_code, sensor_code, value, data_cycle, timestamp)\n    VALUES (\n        '${plc_code}', \n        '${sensor_code}', \n        ${valueConverted}, \n        ${finalCycle === null ? 'NULL' : finalCycle}, \n        '${timestamp}'\n    );\n`;\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
+        "x": 860,
         "y": 180,
         "wires": [
             [
@@ -323,7 +263,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
+        "x": 810,
         "y": 440,
         "wires": [
             [
@@ -376,7 +316,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 380,
+        "y": 360,
         "wires": [
             [
                 "5a3d6822d8636757"
@@ -395,8 +335,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 380,
+        "x": 780,
+        "y": 360,
         "wires": [
             [
                 "48639c479673093b"
@@ -660,25 +600,11 @@
         "wires": []
     },
     {
-        "id": "2b5ee52656dc3dcd",
-        "type": "mysql",
-        "z": "a850bca680aa7206",
-        "mydb": "76db9150459da0db",
-        "name": "database",
-        "x": 1200,
-        "y": 340,
-        "wires": [
-            [
-                "e68336930403086b"
-            ]
-        ]
-    },
-    {
-        "id": "e68336930403086b",
+        "id": "464eceb50cd2dcb7",
         "type": "debug",
         "z": "a850bca680aa7206",
-        "name": "Debug3",
-        "active": true,
+        "name": "Debug0",
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -686,8 +612,25 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1380,
-        "y": 340,
+        "x": 600,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "974613e01bea10df",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "Debug2",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1140,
+        "y": 180,
         "wires": []
     }
 ]
