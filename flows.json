@@ -3,7 +3,15 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Dev",
-        "disabled": true,
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8d0798d68fe40ce6",
+        "type": "tab",
+        "label": "DB_Initialisation",
+        "disabled": false,
         "info": "",
         "env": []
     },
@@ -41,10 +49,10 @@
     {
         "id": "76db9150459da0db",
         "type": "MySQLdatabase",
-        "name": "iot_sda",
+        "name": "iot_sda2",
         "host": "127.0.0.1",
         "port": "3306",
-        "db": "iot_sda",
+        "db": "iot_sda2",
         "tz": "",
         "charset": "UTF8"
     },
@@ -62,35 +70,11 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 570,
-        "y": 180,
+        "x": 470,
+        "y": 300,
         "wires": [
             [
-                "3e42471de8ff3207",
-                "9d396dfba006640c"
-            ]
-        ]
-    },
-    {
-        "id": "2fce901cabfe66d0",
-        "type": "mqtt in",
-        "z": "a850bca680aa7206",
-        "name": "MQTT",
-        "topic": "data/07/#",
-        "qos": "2",
-        "datatype": "auto",
-        "broker": "5a6dd8a701a64ce7",
-        "nl": false,
-        "rap": true,
-        "rh": 0,
-        "inputs": 0,
-        "x": 390,
-        "y": 180,
-        "wires": [
-            [
-                "f775e65ba0493565",
-                "81e6c6130d508976",
-                "464eceb50cd2dcb7"
+                "4599b399b3698075"
             ]
         ]
     },
@@ -99,15 +83,15 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "insert sensor_history interval",
-        "func": "// ======================================================\n// PARSE ULANG DARI PAYLOAD\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\n\n// ======================================================\n// AMBIL INTERVAL DARI FLOW\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\nlet intervalMin = intervalMap[sensorKey] || parseInt(payload.interval) || 30;\n\nlet intervalMs = intervalMin * 60 * 1000;\nlet intervalSec = intervalMin * 60;\n\nlet lastInsert = lastInsertMap[sensorKey] || 0;\n\n\n// ======================================================\n// CEK INTERVAL\n// ======================================================\nif (now - lastInsert < intervalMs) {\n    return null;\n}\n\n\n// ======================================================\n// UPDATE LAST INSERT\n// ======================================================\nlastInsertMap[sensorKey] = now;\nflow.set(\"lastInsertMap\", lastInsertMap);\n\nmsg.topic = `\nINSERT INTO sensor_history (plc_code, sensor_code, value, timestamp)\nSELECT\n    plc_code,\n    sensor_code,\n    AVG(value) AS value,\n    FROM_UNIXTIME(\n        CEILING(UNIX_TIMESTAMP(timestamp) / ${intervalSec}) * ${intervalSec}\n    ) AS time_bucket\nFROM sensor_realtime\nWHERE sensor_code = '${sensor_code}'\nAND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\nGROUP BY plc_code, sensor_code, time_bucket\nON DUPLICATE KEY UPDATE value = VALUES(value);\n`;\n\n\nreturn msg;",
+        "func": "// ======================================================\n// SENSOR KEY\n// ======================================================\nlet sensorKey = `${msg.plc_code}/${msg.sensor_code}`;\nlet now = Date.now();\n\n// ======================================================\n// AMBIL INTERVAL\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\n// fallback default 30 menit\nlet intervalMin = intervalMap[sensorKey] || 30;\nlet intervalMs = intervalMin * 60 * 1000;\nlet intervalSec = intervalMin * 60;\nlet lastInsert = lastInsertMap[sensorKey] || 0;\n\n// ======================================================\n// CEK INTERVAL\n// ======================================================\nif ((now - lastInsert) < intervalMs) {\n    return null;\n}\n\n// ======================================================\n// UPDATE LAST INSERT\n// ======================================================\nlastInsertMap[sensorKey] = now;\nflow.set(\"lastInsertMap\", lastInsertMap);\n\n// ======================================================\n// BUILD SQL HISTORY\n// ======================================================\nmsg.topic = `\nINSERT INTO sensor_history\n(\n    plc_code,\n    sensor_code,\n    value,\n    timestamp\n)\nSELECT\n    plc_code,\n    sensor_code,\n    AVG(value) AS value,\n    FROM_UNIXTIME(\n        CEILING(\n            UNIX_TIMESTAMP(timestamp) / ${intervalSec}\n        ) * ${intervalSec}\n    ) AS time_bucket\nFROM sensor_realtime\nWHERE sensor_code = '${msg.sensor_code}'\nAND plc_code = '${msg.plc_code}'\nAND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\nGROUP BY\n    plc_code,\n    sensor_code,\n    time_bucket\nON DUPLICATE KEY UPDATE\n    value = VALUES(value);\n`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
-        "y": 260,
+        "x": 920,
+        "y": 380,
         "wires": [
             [
                 "48639c479673093b"
@@ -126,8 +110,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 770,
-        "y": 320,
+        "x": 790,
+        "y": 440,
         "wires": [
             [
                 "48639c479673093b"
@@ -152,7 +136,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 320,
+        "y": 440,
         "wires": [
             [
                 "1b5206eea885dcbd"
@@ -166,7 +150,7 @@
         "name": "MQTT → Realtime DB",
         "info": " - Mendengarkan data sensor dari MQTT broker.\n - Parse payload dan insert ke tabel sensor_realtime.\n - Tujuan: menyimpan data mentah (realtime, high-resolution).",
         "x": 140,
-        "y": 180,
+        "y": 300,
         "wires": []
     },
     {
@@ -176,7 +160,7 @@
         "name": "Interval → Tabel History",
         "info": " - Inject node jalan setiap interval.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_history.\n - Tujuan: menyimpan data jangka panjang dalam resolusi lebih rendah.",
         "x": 140,
-        "y": 260,
+        "y": 380,
         "wires": []
     },
     {
@@ -186,7 +170,7 @@
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
         "x": 160,
-        "y": 340,
+        "y": 460,
         "wires": []
     },
     {
@@ -196,24 +180,7 @@
         "name": "Alert",
         "info": "",
         "x": 90,
-        "y": 440,
-        "wires": []
-    },
-    {
-        "id": "f08575dbb1ec819f",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "Debug1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1380,
-        "y": 260,
+        "y": 560,
         "wires": []
     },
     {
@@ -222,11 +189,11 @@
         "z": "a850bca680aa7206",
         "mydb": "76db9150459da0db",
         "name": "database",
-        "x": 1200,
-        "y": 260,
+        "x": 1280,
+        "y": 380,
         "wires": [
             [
-                "f08575dbb1ec819f"
+                "b2423fbb3bb4d0b2"
             ]
         ]
     },
@@ -235,19 +202,18 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "insert tabel sensor_realtime",
-        "func": "// ======================================================\n// PARSE MQTT TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") return null;\n\nlet parts = msg.topic.split(\"/\");\nlet plc_code = parts[3];\n\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\n\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle;   // undefined jika bukan cycle sensor\n\nif (!plc_code || !sensor_code || !timestamp) return null;\n\n\n// ======================================================\n// GLOBAL STATE (status online / lastSeen)\n// ======================================================\nlet lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n\nlet sensorKey = `${plc_code}/${sensor_code}`;\nlet now = Date.now();\n\nlet intervalMap = flow.get(\"intervalMap\") || {};\nintervalMap[sensorKey] = parseInt(payload.interval) || 30;\nflow.set(\"intervalMap\", intervalMap);\n\n// Update last seen\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n\n// ======================================================\n// ONLINE FIRST LOG\n// ======================================================\nif (statusSensor[sensorKey] !== \"online\") {\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n\n    return {\n        topic: `\n            INSERT INTO sensor_log \n            (plc_code, sensor_code, status, timestamp)\n            VALUES ('${plc_code}', '${sensor_code}', '1', '${timestamp}');\n        `\n    };\n}\n\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\n\nswitch (measurement_code) {\n    case \"01\": valueConverted = parseFloat(rawValue) / 1000; break;\n    case \"02\":\n    case \"03\":\n    case \"04\": valueConverted = parseFloat(rawValue) / 10; break;\n    default: valueConverted = parseFloat(rawValue);\n}\n\n\n// ======================================================\n// SENSOR TYPE CHECK (cycle atau tidak)\n// ======================================================\nlet isCycleSensor = (cycleValue !== undefined && cycleValue !== null);\n\n\n// ======================================================\n// BUILD SQL FOR 1 TABLE\n// ======================================================\nlet finalCycle = isCycleSensor ? parseInt(cycleValue, 10) || 0 : null;\n\nmsg.topic = `\n    INSERT INTO sensor_realtime\n    (plc_code, sensor_code, value, data_cycle, timestamp)\n    VALUES (\n        '${plc_code}', \n        '${sensor_code}', \n        ${valueConverted}, \n        ${finalCycle === null ? 'NULL' : finalCycle}, \n        '${timestamp}'\n    );\n`;\n\nreturn msg;\n",
+        "func": "msg.topic = `\nINSERT INTO sensor_realtime\n(\n    plc_code,\n    sensor_code,\n    value,\n    data_cycle,\n    timestamp\n)\nVALUES (\n    '${msg.plc_code}',\n    '${msg.sensor_code}',\n    ${msg.value},\n    ${msg.cycleValue},\n    '${msg.timestamp}'\n);\n`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
-        "y": 180,
+        "x": 920,
+        "y": 320,
         "wires": [
             [
-                "48639c479673093b",
-                "974613e01bea10df"
+                "48639c479673093b"
             ]
         ]
     },
@@ -264,7 +230,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 440,
+        "y": 560,
         "wires": [
             [
                 "48639c479673093b"
@@ -291,7 +257,7 @@
         "topic": "",
         "payloadType": "date",
         "x": 470,
-        "y": 440,
+        "y": 560,
         "wires": [
             [
                 "197658740bcf179c"
@@ -316,7 +282,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 360,
+        "y": 480,
         "wires": [
             [
                 "5a3d6822d8636757"
@@ -336,7 +302,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 360,
+        "y": 480,
         "wires": [
             [
                 "48639c479673093b"
@@ -350,7 +316,7 @@
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
         "x": 170,
-        "y": 520,
+        "y": 640,
         "wires": []
     },
     {
@@ -360,7 +326,7 @@
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
         "x": 270,
-        "y": 700,
+        "y": 820,
         "wires": []
     },
     {
@@ -371,7 +337,7 @@
         "server": "fae6fc6b5acf089c",
         "client": "",
         "x": 1110,
-        "y": 620,
+        "y": 740,
         "wires": []
     },
     {
@@ -387,7 +353,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 620,
+        "y": 740,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -403,7 +369,7 @@
         "action": "",
         "pretty": true,
         "x": 630,
-        "y": 620,
+        "y": 740,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -421,7 +387,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 670,
-        "y": 700,
+        "y": 820,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -437,7 +403,7 @@
         "action": "",
         "pretty": true,
         "x": 910,
-        "y": 700,
+        "y": 820,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -457,7 +423,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 700,
+        "y": 820,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -477,7 +443,7 @@
         "finalize": "",
         "libs": [],
         "x": 1700,
-        "y": 700,
+        "y": 820,
         "wires": [
             []
         ]
@@ -489,7 +455,7 @@
         "name": "Websocket → Latest Sensor Data",
         "info": "",
         "x": 180,
-        "y": 620,
+        "y": 740,
         "wires": []
     },
     {
@@ -500,7 +466,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1340,
-        "y": 520,
+        "y": 640,
         "wires": []
     },
     {
@@ -516,7 +482,7 @@
         "finalize": "",
         "libs": [],
         "x": 1090,
-        "y": 520,
+        "y": 640,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -528,13 +494,13 @@
         "type": "http in",
         "z": "a850bca680aa7206",
         "name": "API sensor_realtime",
-        "url": "/api/sensor_realtime/latest-03/:sensor?",
+        "url": "/api/sensor_realtime/latest-07/:sensor?",
         "method": "get",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 450,
-        "y": 520,
+        "y": 640,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -554,7 +520,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 520,
+        "y": 640,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -568,7 +534,7 @@
         "mydb": "76db9150459da0db",
         "name": "database",
         "x": 880,
-        "y": 520,
+        "y": 640,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -582,7 +548,7 @@
         "mydb": "76db9150459da0db",
         "name": "database",
         "x": 1480,
-        "y": 700,
+        "y": 820,
         "wires": [
             [
                 "93ea4af6d0509d68"
@@ -594,17 +560,139 @@
         "type": "comment",
         "z": "a850bca680aa7206",
         "name": "######################## README (Buka ini terlebih dahulu) ########################",
-        "info": "Jika sudah berhasil clone, beberapa node harus diubah, antara lain :\n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#` .\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n 2. **Database** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tsb menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. **Nama Flow** : default dari git 'SALATIGA'. Ganti jadi nama plant\n\n**Selain 3 node diatas, tidak perlu diubah, kecuali tahap development**",
+        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. klik **Deploy**\n\n**Selain diatas, tidak perlu diubah, kecuali tahap development**",
         "x": 370,
-        "y": 40,
+        "y": 100,
         "wires": []
     },
     {
-        "id": "464eceb50cd2dcb7",
+        "id": "72190acd9154e130",
+        "type": "mqtt out",
+        "z": "a850bca680aa7206",
+        "name": "",
+        "topic": "",
+        "qos": "1",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "5a6dd8a701a64ce7",
+        "x": 1070,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "489079518de56347",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "MQTT Topic",
+        "func": "let plant_code = msg.plant_code;\nlet sensor_code = msg.sensor_code;\n\nmsg.topic = `iot/${plant_code}/${sensor_code}`;\n\nmsg.payload = {\n    sensor_code: msg.sensor_code,\n    value: msg.value,\n    cycleValue: msg.cycleValue,\n    timestamp: msg.timestamp\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 200,
+        "wires": [
+            [
+                "72190acd9154e130"
+            ]
+        ]
+    },
+    {
+        "id": "4599b399b3698075",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Parse",
+        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.timestamp = timestamp;\n\n// ======================================================\n// OPTIONAL: KEEP RAW PAYLOAD\n// ======================================================\n// msg.raw_payload = payload;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 300,
+        "wires": [
+            [
+                "489079518de56347",
+                "3e42471de8ff3207",
+                "9d396dfba006640c",
+                "5282bba4d8e7d9d0"
+            ]
+        ]
+    },
+    {
+        "id": "5282bba4d8e7d9d0",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Sensor State",
+        "func": "let lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n// let intervalMap = flow.get(\"intervalMap\") || {};\nlet sensorKey = `${msg.plc_code}/${msg.sensor_code}`;\nlet now = Date.now();\n\n// ============================================\n// UPDATE LAST SEEN\n// ============================================\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n// ============================================\n// UPDATE INTERVAL\n// ============================================\n// intervalMap[sensorKey] = 30;\n// flow.set(\"intervalMap\", intervalMap);\n\n// ============================================\n// FIRST ONLINE DETECT\n// ============================================\nif (statusSensor[sensorKey] !== \"online\") {\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n    return [msg, null];\n} \nreturn [null, msg];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 260,
+        "wires": [
+            [
+                "71a6110c68366f79"
+            ]
+        ]
+    },
+    {
+        "id": "71a6110c68366f79",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Insert Log",
+        "func": "msg.topic = `\nINSERT INTO sensor_log\n(\n    plc_code,\n    sensor_code,\n    status,\n    timestamp\n)\nVALUES (\n    '${msg.plc_code}',\n    '${msg.sensor_code}',\n    '1',\n    '${msg.timestamp}'\n);\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1080,
+        "y": 260,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "b35cf6658cf55018",
+        "type": "mqtt in",
+        "z": "a850bca680aa7206",
+        "name": "MQTT",
+        "topic": "data/07/#",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "5a6dd8a701a64ce7",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 310,
+        "y": 300,
+        "wires": [
+            [
+                "f775e65ba0493565"
+            ]
+        ]
+    },
+    {
+        "id": "b2423fbb3bb4d0b2",
         "type": "debug",
         "z": "a850bca680aa7206",
-        "name": "Debug0",
-        "active": false,
+        "name": "debug 2",
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -612,16 +700,121 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 600,
+        "x": 1440,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "abb9824c35e440d9",
+        "type": "inject",
+        "z": "8d0798d68fe40ce6",
+        "name": "Inject once ",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
         "y": 120,
-        "wires": []
+        "wires": [
+            [
+                "0c44aa4299050169",
+                "6c60ced45da60780",
+                "73026a4505b2913f"
+            ]
+        ]
     },
     {
-        "id": "974613e01bea10df",
+        "id": "0c44aa4299050169",
+        "type": "function",
+        "z": "8d0798d68fe40ce6",
+        "name": "Function CREATE sensor_history",
+        "func": "msg.topic = `\n\nCREATE TABLE IF NOT EXISTS sensor_history (\n    id INT NOT NULL AUTO_INCREMENT,\n    plc_code CHAR(19),\n    sensor_code CHAR(6) NOT NULL,\n    value DECIMAL(6,2) NOT NULL,\n    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    PRIMARY KEY (id),\n    UNIQUE KEY uniq_sensor_time\n    (\n        plc_code,\n        sensor_code,\n        timestamp\n    )\n);\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 120,
+        "wires": [
+            [
+                "db2061c66bb8655a"
+            ]
+        ]
+    },
+    {
+        "id": "db2061c66bb8655a",
+        "type": "mysql",
+        "z": "8d0798d68fe40ce6",
+        "mydb": "76db9150459da0db",
+        "name": "database_init",
+        "x": 810,
+        "y": 120,
+        "wires": [
+            [
+                "ba30cf0db0f5a503"
+            ]
+        ]
+    },
+    {
+        "id": "6c60ced45da60780",
+        "type": "function",
+        "z": "8d0798d68fe40ce6",
+        "name": "Function CREATE sensor_log",
+        "func": "msg.topic = `\nCREATE TABLE IF NOT EXISTS sensor_log (\n    id INT NOT NULL AUTO_INCREMENT,\n    plc_code VARCHAR(50),\n    sensor_code VARCHAR(50),\n    status VARCHAR(20),\n    event_time TIMESTAMP NULL,\n    created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,\n    PRIMARY KEY (id)\n);\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 180,
+        "wires": [
+            [
+                "db2061c66bb8655a"
+            ]
+        ]
+    },
+    {
+        "id": "73026a4505b2913f",
+        "type": "function",
+        "z": "8d0798d68fe40ce6",
+        "name": "Function CREATE sensor_realtime",
+        "func": "msg.topic = `\n\nCREATE TABLE IF NOT EXISTS sensor_realtime (\n    id INT NOT NULL AUTO_INCREMENT,\n    plc_code CHAR(19),\n    sensor_code CHAR(6) NOT NULL,\n    value DECIMAL(8,2) NOT NULL,\n    data_cycle DECIMAL(8,0) DEFAULT NULL,\n    timestamp TIMESTAMP NOT NULL,\n    insert_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,\n    PRIMARY KEY (id)\n);\n\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 240,
+        "wires": [
+            [
+                "db2061c66bb8655a"
+            ]
+        ]
+    },
+    {
+        "id": "ba30cf0db0f5a503",
         "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "Debug2",
-        "active": false,
+        "z": "8d0798d68fe40ce6",
+        "name": "debug 1",
+        "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
@@ -629,8 +822,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1140,
-        "y": 180,
+        "x": 1000,
+        "y": 120,
         "wires": []
     }
 ]
