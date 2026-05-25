@@ -700,7 +700,7 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1440,
+        "x": 1460,
         "y": 380,
         "wires": []
     },
