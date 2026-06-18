@@ -3,7 +3,7 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Dev",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -61,6 +61,47 @@
         "willMsg": {},
         "userProps": "",
         "sessionExpiry": ""
+    },
+    {
+        "id": "369aee6f0e8e1c5c",
+        "type": "mqtt-broker",
+        "name": "MQTT SGN",
+        "broker": "10.39.8.42",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "2c177d2d252ed123",
+        "type": "MySQLdatabase",
+        "name": "database SGN",
+        "host": "10.39.8.40",
+        "port": "3306",
+        "db": "iot_sgn",
+        "tz": "",
+        "charset": "UTF8"
     },
     {
         "id": "f775e65ba0493565",
@@ -187,13 +228,14 @@
         "id": "48639c479673093b",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "",
+        "mydb": "76db9150459da0db",
         "name": "database",
         "x": 1280,
         "y": 380,
         "wires": [
             [
-                "b2423fbb3bb4d0b2"
+                "b2423fbb3bb4d0b2",
+                "66dd32705a9b142b"
             ]
         ]
     },
@@ -316,7 +358,7 @@
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
         "x": 170,
-        "y": 640,
+        "y": 740,
         "wires": []
     },
     {
@@ -326,7 +368,7 @@
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
         "x": 270,
-        "y": 820,
+        "y": 920,
         "wires": []
     },
     {
@@ -337,7 +379,7 @@
         "server": "fae6fc6b5acf089c",
         "client": "",
         "x": 1110,
-        "y": 740,
+        "y": 840,
         "wires": []
     },
     {
@@ -353,7 +395,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 740,
+        "y": 840,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -369,7 +411,7 @@
         "action": "",
         "pretty": true,
         "x": 630,
-        "y": 740,
+        "y": 840,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -387,7 +429,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 670,
-        "y": 820,
+        "y": 920,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -403,7 +445,7 @@
         "action": "",
         "pretty": true,
         "x": 910,
-        "y": 820,
+        "y": 920,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -423,7 +465,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 820,
+        "y": 920,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -443,7 +485,7 @@
         "finalize": "",
         "libs": [],
         "x": 1700,
-        "y": 820,
+        "y": 920,
         "wires": [
             []
         ]
@@ -455,7 +497,7 @@
         "name": "Websocket → Latest Sensor Data",
         "info": "",
         "x": 180,
-        "y": 740,
+        "y": 840,
         "wires": []
     },
     {
@@ -466,7 +508,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1340,
-        "y": 640,
+        "y": 740,
         "wires": []
     },
     {
@@ -482,7 +524,7 @@
         "finalize": "",
         "libs": [],
         "x": 1090,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -500,7 +542,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 450,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -520,7 +562,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -534,7 +576,7 @@
         "mydb": "76db9150459da0db",
         "name": "database",
         "x": 880,
-        "y": 640,
+        "y": 740,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -548,7 +590,7 @@
         "mydb": "76db9150459da0db",
         "name": "database",
         "x": 1480,
-        "y": 820,
+        "y": 920,
         "wires": [
             [
                 "93ea4af6d0509d68"
@@ -560,7 +602,7 @@
         "type": "comment",
         "z": "a850bca680aa7206",
         "name": "######################## README (Buka ini terlebih dahulu) ########################",
-        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. klik **Deploy**\n\n**Selain diatas, tidak perlu diubah, kecuali tahap development**",
+        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n 3. Aktifkan / enable flow DB_initialisation\n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. klik **Deploy**\n\n**Selain diatas, tidak perlu diubah, kecuali tahap development**",
         "x": 370,
         "y": 100,
         "wires": []
@@ -569,7 +611,7 @@
         "id": "72190acd9154e130",
         "type": "mqtt out",
         "z": "a850bca680aa7206",
-        "name": "",
+        "name": "MQTT Nasional",
         "topic": "",
         "qos": "1",
         "retain": "true",
@@ -579,7 +621,7 @@
         "correl": "",
         "expiry": "",
         "broker": "95030b5bf43fa98e",
-        "x": 1070,
+        "x": 1100,
         "y": 200,
         "wires": []
     },
@@ -671,10 +713,10 @@
         "type": "mqtt in",
         "z": "a850bca680aa7206",
         "name": "MQTT",
-        "topic": "data/07/#",
+        "topic": "data/E/#",
         "qos": "2",
         "datatype": "auto",
-        "broker": "",
+        "broker": "369aee6f0e8e1c5c",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -702,6 +744,225 @@
         "statusType": "auto",
         "x": 1460,
         "y": 380,
+        "wires": []
+    },
+    {
+        "id": "5c2f4215a5460946",
+        "type": "inject",
+        "z": "a850bca680aa7206",
+        "name": "Inject Per Jam",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "0 0-23 * * *",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 440,
+        "y": 640,
+        "wires": [
+            [
+                "f8d7912d9566e9d6"
+            ]
+        ]
+    },
+    {
+        "id": "64ccdc99ee90415d",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "3d60453758a77ccd",
+        "type": "admin",
+        "z": "a850bca680aa7206",
+        "d": true,
+        "name": "WA Admin",
+        "whatsappLink": "",
+        "x": 130,
+        "y": 1100,
+        "wires": [
+            [
+                "71f8bb16f78ae611"
+            ]
+        ]
+    },
+    {
+        "id": "cabce490dfd6655d",
+        "type": "chats-in",
+        "z": "a850bca680aa7206",
+        "d": true,
+        "name": "Chats In",
+        "whatsappLink": "",
+        "whatsappLiteevent": "messages.upsert",
+        "whatsappWebevent": "message",
+        "x": 120,
+        "y": 1020,
+        "wires": [
+            [
+                "64ccdc99ee90415d"
+            ]
+        ]
+    },
+    {
+        "id": "71f8bb16f78ae611",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 300,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "e3baa926886e52cb",
+        "type": "group-out",
+        "z": "a850bca680aa7206",
+        "name": "Group Message",
+        "whatsappLink": "",
+        "gID": "",
+        "x": 1700,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "f8d7912d9566e9d6",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Report Hourly",
+        "func": "// 1. Ambil metadata dari memori Global\nlet metadata = flow.get(\"sensor_metadata\");\n\n// Cegah error jika metadata atau objek sensors belum terdefinisi\nif (!metadata || !metadata.sensors || Object.keys(metadata.sensors).length === 0) {\n    node.error(\"sensor_metadata atau list sensors belum disetting di Global Context\", msg);\n    return null;\n}\n\n// Ambil kunci sensor dari properti .sensors\nconst codes = Object.keys(metadata.sensors);\nconst sqlCodes = codes.map(c => `'${c}'`).join(',');\n\nmsg.isTimerReport = true;\n\n// 2. Bangun Query dinamis berdasarkan sensor yang aktif\nmsg.topic = `\n    SELECT t1.* FROM sensor_realtime t1\n    INNER JOIN (\n        SELECT sensor_code, MAX(id) as mid\n        FROM sensor_realtime\n        WHERE sensor_code IN (${sqlCodes})\n        GROUP BY sensor_code\n    ) t2 ON t1.id = t2.mid\n    ORDER BY t1.sensor_code ASC;\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 640,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "66dd32705a9b142b",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Template Report Hourly",
+        "func": "if (msg.isTimerReport !== true || !Array.isArray(msg.payload)) {\n    return null;\n}\n\n// 1. Ambil Metadata dari Global\nlet metadata = flow.get(\"sensor_metadata\");\nif (!metadata || !metadata.sensors || Object.keys(metadata.sensors).length === 0) {\n    node.error(\"Metadata atau list sensors kosong saat merender laporan\", msg);\n    return null;\n}\n\nconst rows = msg.payload;\nconst waktuWIB = new Date().toLocaleString('id-ID', {\n    timeZone: 'Asia/Jakarta',\n    hour: '2-digit', minute: '2-digit', hour12: false\n});\n\n// 2. Ambil nama Plant langsung dari properti tingkat atas\nconst namaPlant = metadata.plant || \"UNDEFINED\";\n\n// 3. Susun Header Laporan secara Dinamis\nlet report = `📊 *REKAPITULASI SUHU: PLANT ${namaPlant.toUpperCase()}* 📊\\n`;\nreport += \"--------------------------\\n\\n\";\n\n// 4. Loop Data berdasarkan konfigurasi metadata.sensors\nObject.keys(metadata.sensors).forEach((code) => {\n    const info = metadata.sensors[code];\n    const rowData = rows.find(r => r.sensor_code === code);\n    let teksSuhu = \"_Tidak ada data_\";\n\n    if (rowData) {\n        const nilaiSuhu = parseFloat(rowData.value || 0);\n\n        if (nilaiSuhu < 850) {\n            teksSuhu = `*${nilaiSuhu.toFixed(1).replace('.', ',')} °C*`;\n        } else {\n            teksSuhu = \"_Sensor Off (850)_\";\n        }\n    }\n\n    // Format pengiriman pesan ke WA\n    report += `*${info.name} (${code})*\\n`;\n    report += `Suhu : ${teksSuhu}\\n\\n`;\n});\n\nreport += \"--------------------------\\n\";\nreport += `⏰ _Update Otomatis: ${waktuWIB} WIB_`;\n\n// 5. Masukkan teks laporan ke payload utama\nmsg.payload = report;\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Template Siap: \" + waktuWIB });\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1470,
+        "y": 480,
+        "wires": [
+            [
+                "e3baa926886e52cb"
+            ]
+        ]
+    },
+    {
+        "id": "a839592221c0b9b5",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Kamus Sensor",
+        "info": "",
+        "x": 120,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "03a55c22b97ccd50",
+        "type": "inject",
+        "z": "a850bca680aa7206",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"plant\":\"Sragen\",\"sensors\":{\"SH0206\":{\"name\":\"Scalder 1\"},\"SH0211\":{\"name\":\"Scalder 2\"},\"SH0208\":{\"name\":\"Evisceration Room\"}}}",
+        "payloadType": "json",
+        "x": 310,
+        "y": 1220,
+        "wires": [
+            [
+                "1a5b611ee1027c9a"
+            ]
+        ]
+    },
+    {
+        "id": "1a5b611ee1027c9a",
+        "type": "change",
+        "z": "a850bca680aa7206",
+        "name": "Change Sensor",
+        "rules": [
+            {
+                "t": "set",
+                "p": "sensor_metadata",
+                "pt": "flow",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 1220,
+        "wires": [
+            [
+                "8c7669903cbc19eb"
+            ]
+        ]
+    },
+    {
+        "id": "8c7669903cbc19eb",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 680,
+        "y": 1220,
         "wires": []
     },
     {
