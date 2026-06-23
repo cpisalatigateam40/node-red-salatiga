@@ -2,7 +2,7 @@
     {
         "id": "a850bca680aa7206",
         "type": "tab",
-        "label": "Dev",
+        "label": "Flow IoT",
         "disabled": true,
         "info": "",
         "env": []
@@ -601,9 +601,9 @@
         "id": "76efd0daf1d7c3df",
         "type": "comment",
         "z": "a850bca680aa7206",
-        "name": "######################## README (Buka ini terlebih dahulu) ########################",
-        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n 3. Aktifkan / enable flow DB_initialisation\n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. klik **Deploy**\n\n ## C. Notifikasi WA\nJika tidak digunakan :\n  - Pastikan node 'Chats In' memiliki icon segitika merah\n  - Jika tidak, hapus nodes waWebClient whatsappLink di configuration nodes. Klik 2 kali pada nodes, klik Delete pada bagian kiri atas\n  - Klik Deploy\nJika digunakan setting sesuai di bawah ini :\n  1. **Node WA Admin** (Konfigurasi Client Utama)\n      - add new whatsappLink melalui tombol + \n      - Pada Whatsapp Client pilih Whatsapp Web , lalu klik tombol Add\n      - Pada kolom client pilih waWebClient\n      - Scan QR Code pada nomor perangkat yang dijadikan sebagai pengirim pesan di Whatsapp (Note: QR Code muncul setelah di deploy)\n  2. **Chats In** (Pencarian ID Group)\n      - Klik 2 kali pada node *Chats In*\n      - Pada client, pilih waWebClient, klik done, lakukan *Full Deploy*\n      - Masukkan nomor HP pengirim ke dalam grup Whatsapp tujuan (IoT)\n      - Kirim pesan sembarang pada grup tersebut melalui nomor HP lain (bukan nomor pengirim)\n      - Buka panel debug message \n      - Cari pesan yang masuk lalu copy ID Group \n  3. **Group Message** \n      - Klik 2 kali pada node Group Message \n      - Pada kolom Client pilih waWebClient\n      - Paste ID Group di kolom Group ID yang didapatkan dari debug massage tadi\n      - Klik Done, dan lakukan *Full Deploy*\n\n**Selain diatas, tidak perlu diubah, kecuali tahap development**",
-        "x": 370,
+        "name": "Versi 1.10",
+        "info": "",
+        "x": 100,
         "y": 100,
         "wires": []
     },
@@ -650,7 +650,7 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "Parse",
-        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.timestamp = timestamp;\n\n// ======================================================\n// OPTIONAL: KEEP RAW PAYLOAD\n// ======================================================\n// msg.raw_payload = payload;\n\nreturn msg;",
+        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.timestamp = timestamp;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -673,7 +673,7 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "Sensor State",
-        "func": "let lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\n// let intervalMap = flow.get(\"intervalMap\") || {};\nlet sensorKey = `${msg.plc_code}/${msg.sensor_code}`;\nlet now = Date.now();\n\n// ============================================\n// UPDATE LAST SEEN\n// ============================================\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n// ============================================\n// UPDATE INTERVAL\n// ============================================\n// intervalMap[sensorKey] = 30;\n// flow.set(\"intervalMap\", intervalMap);\n\n// ============================================\n// FIRST ONLINE DETECT\n// ============================================\nif (statusSensor[sensorKey] !== \"online\") {\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n    return [msg, null];\n} \nreturn [null, msg];",
+        "func": "let lastSeenSensor = flow.get(\"lastSeenSensor\") || {};\nlet statusSensor = flow.get(\"statusSensor\") || {};\nlet sensorKey = `${msg.plc_code}/${msg.sensor_code}`;\nlet now = Date.now();\n\n// ============================================\n// UPDATE LAST SEEN\n// ============================================\nlastSeenSensor[sensorKey] = now;\nflow.set(\"lastSeenSensor\", lastSeenSensor);\n\n// ============================================\n// FIRST ONLINE DETECT\n// ============================================\nif (statusSensor[sensorKey] !== \"online\") {\n    statusSensor[sensorKey] = \"online\";\n    flow.set(\"statusSensor\", statusSensor);\n    return [msg, null];\n} \nreturn [null, msg];",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -963,6 +963,26 @@
         "statusType": "auto",
         "x": 680,
         "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "baada4a4e38555b6",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "######################## README (Buka ini terlebih dahulu) ########################",
+        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n 3. Aktifkan / enable flow DB_initialisation\n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. klik **Deploy**\n\n ## C. Notifikasi WA\nJika tidak digunakan :\n  - Pastikan node 'Chats In' memiliki icon segitika merah\n  - Jika tidak, hapus nodes waWebClient whatsappLink di configuration nodes. Klik 2 kali pada nodes, klik Delete pada bagian kiri atas\n  - Klik Deploy\nJika digunakan setting sesuai di bawah ini :\n  1. **Node WA Admin** (Konfigurasi Client Utama)\n      - add new whatsappLink melalui tombol + \n      - Pada Whatsapp Client pilih Whatsapp Web , lalu klik tombol Add\n      - Pada kolom client pilih waWebClient\n      - Scan QR Code pada nomor perangkat yang dijadikan sebagai pengirim pesan di Whatsapp (Note: QR Code muncul setelah di deploy)\n  2. **Chats In** (Pencarian ID Group)\n      - Klik 2 kali pada node *Chats In*\n      - Pada client, pilih waWebClient, klik done, lakukan *Full Deploy*\n      - Masukkan nomor HP pengirim ke dalam grup Whatsapp tujuan (IoT)\n      - Kirim pesan sembarang pada grup tersebut melalui nomor HP lain (bukan nomor pengirim)\n      - Buka panel debug message \n      - Cari pesan yang masuk lalu copy ID Group \n  3. **Group Message** \n      - Klik 2 kali pada node Group Message \n      - Pada kolom Client pilih waWebClient\n      - Paste ID Group di kolom Group ID yang didapatkan dari debug massage tadi\n      - Klik Done, dan lakukan *Full Deploy*\n\n**Selain diatas, tidak perlu diubah, kecuali tahap development**",
+        "x": 370,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fa7295593bd21f5b",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "📌 Khusus Node-RED Dev 141",
+        "info": "Jika proses development sudah selesai dan siap di push, \nmohon update daftar perubahan pada spreadsheet list iot berikut \nuntuk keperluan versioning dan tracking perubahan:\n\nhttps://intip.in/listiot",
+        "x": 310,
+        "y": 100,
         "wires": []
     },
     {
