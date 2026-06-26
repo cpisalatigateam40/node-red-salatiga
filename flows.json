@@ -3,7 +3,7 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Flow IoT",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -11,7 +11,7 @@
         "id": "8d0798d68fe40ce6",
         "type": "tab",
         "label": "DB_Initialisation",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -96,8 +96,8 @@
     {
         "id": "2c177d2d252ed123",
         "type": "MySQLdatabase",
-        "name": "database SGN",
-        "host": "10.39.8.40",
+        "name": "iot_sgn",
+        "host": "127.0.0.1",
         "port": "3306",
         "db": "iot_sgn",
         "tz": "",
@@ -124,7 +124,7 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "insert sensor_history interval",
-        "func": "// ======================================================\n// SENSOR KEY\n// ======================================================\nlet sensorKey = `${msg.plc_code}/${msg.sensor_code}`;\nlet now = Date.now();\n\n// ======================================================\n// AMBIL INTERVAL\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\n// fallback default 30 menit\nlet intervalMin = intervalMap[sensorKey] || 30;\nlet intervalMs = intervalMin * 60 * 1000;\nlet intervalSec = intervalMin * 60;\nlet lastInsert = lastInsertMap[sensorKey] || 0;\n\n// ======================================================\n// CEK INTERVAL\n// ======================================================\nif ((now - lastInsert) < intervalMs) {\n    return null;\n}\n\n// ======================================================\n// UPDATE LAST INSERT\n// ======================================================\nlastInsertMap[sensorKey] = now;\nflow.set(\"lastInsertMap\", lastInsertMap);\n\n// ======================================================\n// BUILD SQL HISTORY\n// ======================================================\nmsg.topic = `\nINSERT INTO sensor_history\n(\n    plc_code,\n    sensor_code,\n    value,\n    timestamp\n)\nSELECT\n    plc_code,\n    sensor_code,\n    AVG(value) AS value,\n    FROM_UNIXTIME(\n        CEILING(\n            UNIX_TIMESTAMP(timestamp) / ${intervalSec}\n        ) * ${intervalSec}\n    ) AS time_bucket\nFROM sensor_realtime\nWHERE sensor_code = '${msg.sensor_code}'\nAND plc_code = '${msg.plc_code}'\nAND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\nGROUP BY\n    plc_code,\n    sensor_code,\n    time_bucket\nON DUPLICATE KEY UPDATE\n    value = VALUES(value);\n`;\n\nreturn msg;",
+        "func": "// ======================================================\n// SENSOR KEY\n// ======================================================\nlet sensorKey = `${msg.plc_code}/${msg.sensor_code}`;\nlet now = Date.now();\n\n// ======================================================\n// AMBIL INTERVAL\n// ======================================================\nlet intervalMap = flow.get(\"intervalMap\") || {};\nlet lastInsertMap = flow.get(\"lastInsertMap\") || {};\n\n// fallback default 30 menit\n//let intervalMin = intervalMap[sensorKey] || 30;\nlet intervalMin = Number(msg.interval) || 30;\nlet intervalMs = intervalMin * 60 * 1000;\nlet intervalSec = intervalMin * 60;\n// let lastInsert = lastInsertMap[sensorKey] || 0;\n\n// ======================================================\n// CEK INTERVAL (BERDASARKAN CLOCK-ALIGNED)\n// ======================================================\nlet currentBucketId = Math.floor(now / intervalMs);\nlet lastBucketId = lastInsertMap[sensorKey] || 0;\n\nif (currentBucketId === lastBucketId) {\n    return null; // Masih di rentang waktu yang sama, abaikan pesan\n}\n\n// ======================================================\n// UPDATE LAST INSERT\n// ======================================================\nlastInsertMap[sensorKey] = currentBucketId;\nflow.set(\"lastInsertMap\", lastInsertMap);\n\n// ======================================================\n// BUILD SQL HISTORY\n// ======================================================\nmsg.topic = `\nINSERT INTO sensor_history\n(\n    plc_code,\n    sensor_code,\n    value,\n    timestamp\n)\nSELECT\n    plc_code,\n    sensor_code,\n    SUBSTRING_INDEX(GROUP_CONCAT(value ORDER BY timestamp DESC), ',', 1) AS value,\n    FROM_UNIXTIME(\n        CEILING(\n            UNIX_TIMESTAMP(timestamp) / ${intervalSec}\n        ) * ${intervalSec}\n    ) AS time_bucket\nFROM sensor_realtime\nWHERE sensor_code = '${msg.sensor_code}'\nAND plc_code = '${msg.plc_code}'\nAND timestamp >= DATE_SUB(NOW(), INTERVAL 7 DAY)\n\nAND timestamp <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW()) / ${intervalSec}) * ${intervalSec})\n\nGROUP BY\n    plc_code,\n    sensor_code,\n    time_bucket\nON DUPLICATE KEY UPDATE\n    value = VALUES(value);\n`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -228,7 +228,7 @@
         "id": "48639c479673093b",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "76db9150459da0db",
+        "mydb": "",
         "name": "database",
         "x": 1280,
         "y": 380,
@@ -573,7 +573,7 @@
         "id": "a1042de7bf32f7c3",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "76db9150459da0db",
+        "mydb": "",
         "name": "database",
         "x": 880,
         "y": 740,
@@ -587,7 +587,7 @@
         "id": "605ea1f6543efe0a",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "76db9150459da0db",
+        "mydb": "",
         "name": "database",
         "x": 1480,
         "y": 920,
@@ -716,7 +716,7 @@
         "topic": "data/E/#",
         "qos": "2",
         "datatype": "auto",
-        "broker": "369aee6f0e8e1c5c",
+        "broker": "",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -725,7 +725,8 @@
         "y": 300,
         "wires": [
             [
-                "f775e65ba0493565"
+                "f775e65ba0493565",
+                "77634b11134462c3"
             ]
         ]
     },
@@ -986,6 +987,33 @@
         "wires": []
     },
     {
+        "id": "77634b11134462c3",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "1b9e778e32fb2612",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Kirim Data Suhu Per Jam",
+        "info": "",
+        "x": 150,
+        "y": 640,
+        "wires": []
+    },
+    {
         "id": "abb9824c35e440d9",
         "type": "inject",
         "z": "8d0798d68fe40ce6",
@@ -1040,7 +1068,7 @@
         "id": "db2061c66bb8655a",
         "type": "mysql",
         "z": "8d0798d68fe40ce6",
-        "mydb": "76db9150459da0db",
+        "mydb": "2c177d2d252ed123",
         "name": "database_init",
         "x": 810,
         "y": 120,
