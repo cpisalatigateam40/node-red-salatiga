@@ -3,7 +3,7 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Flow IoT",
-        "disabled": true,
+        "disabled": false,
         "info": "",
         "env": []
     },
@@ -104,6 +104,98 @@
         "charset": "UTF8"
     },
     {
+        "id": "525d33c868ab9d12",
+        "type": "mqtt-broker",
+        "name": "MQTT Salatiga",
+        "broker": "10.71.3.27",
+        "port": "1884",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "760765ff61568fbe",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "iot_slt",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "89bcc32bf26bf3d5",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "MQTT Sragen",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "d87d2c403521587b",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "iot_sda",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "0a53f65ffa0d884c",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "iot_workshop",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
         "id": "f775e65ba0493565",
         "type": "json",
         "z": "a850bca680aa7206",
@@ -152,7 +244,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "48639c479673093b"
@@ -177,7 +269,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
                 "1b5206eea885dcbd"
@@ -211,7 +303,7 @@
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
         "x": 160,
-        "y": 460,
+        "y": 480,
         "wires": []
     },
     {
@@ -221,14 +313,14 @@
         "name": "Alert",
         "info": "",
         "x": 90,
-        "y": 560,
+        "y": 580,
         "wires": []
     },
     {
         "id": "48639c479673093b",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "",
+        "mydb": "760765ff61568fbe",
         "name": "database",
         "x": 1280,
         "y": 380,
@@ -272,7 +364,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
                 "48639c479673093b"
@@ -299,7 +391,7 @@
         "topic": "",
         "payloadType": "date",
         "x": 470,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
                 "197658740bcf179c"
@@ -324,7 +416,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "5a3d6822d8636757"
@@ -344,7 +436,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
                 "48639c479673093b"
@@ -358,7 +450,7 @@
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
         "x": 170,
-        "y": 740,
+        "y": 760,
         "wires": []
     },
     {
@@ -368,7 +460,7 @@
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
         "x": 270,
-        "y": 920,
+        "y": 940,
         "wires": []
     },
     {
@@ -379,7 +471,7 @@
         "server": "fae6fc6b5acf089c",
         "client": "",
         "x": 1110,
-        "y": 840,
+        "y": 860,
         "wires": []
     },
     {
@@ -395,7 +487,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 840,
+        "y": 860,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -411,7 +503,7 @@
         "action": "",
         "pretty": true,
         "x": 630,
-        "y": 840,
+        "y": 860,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -429,7 +521,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 670,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -445,7 +537,7 @@
         "action": "",
         "pretty": true,
         "x": 910,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -465,7 +557,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -484,8 +576,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1700,
-        "y": 920,
+        "x": 1720,
+        "y": 940,
         "wires": [
             []
         ]
@@ -497,7 +589,7 @@
         "name": "Websocket → Latest Sensor Data",
         "info": "",
         "x": 180,
-        "y": 840,
+        "y": 860,
         "wires": []
     },
     {
@@ -507,8 +599,8 @@
         "name": "HTTP Response",
         "statusCode": "",
         "headers": {},
-        "x": 1340,
-        "y": 740,
+        "x": 1360,
+        "y": 760,
         "wires": []
     },
     {
@@ -524,7 +616,7 @@
         "finalize": "",
         "libs": [],
         "x": 1090,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -542,7 +634,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 450,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -562,7 +654,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -573,10 +665,11 @@
         "id": "a1042de7bf32f7c3",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "",
+        "d": true,
+        "mydb": "760765ff61568fbe",
         "name": "database",
         "x": 880,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -587,10 +680,10 @@
         "id": "605ea1f6543efe0a",
         "type": "mysql",
         "z": "a850bca680aa7206",
-        "mydb": "",
-        "name": "database",
+        "mydb": "760765ff61568fbe",
+        "name": "database_hist",
         "x": 1480,
-        "y": 920,
+        "y": 940,
         "wires": [
             [
                 "93ea4af6d0509d68"
@@ -650,7 +743,7 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "Parse",
-        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet interval = payload.interval;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.interval = interval;\nmsg.timestamp = timestamp;\n\nreturn msg;",
+        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet interval = payload.interval;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.interval = interval;\nmsg.timestamp = timestamp;\n\nflow.set('plant_code',plant_code);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -713,10 +806,10 @@
         "type": "mqtt in",
         "z": "a850bca680aa7206",
         "name": "MQTT",
-        "topic": "data/E/#",
+        "topic": "data/SLT/#",
         "qos": "2",
         "datatype": "auto",
-        "broker": "",
+        "broker": "525d33c868ab9d12",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -765,7 +858,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 640,
+        "y": 660,
         "wires": [
             [
                 "f8d7912d9566e9d6"
@@ -786,7 +879,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 300,
-        "y": 1020,
+        "y": 1060,
         "wires": []
     },
     {
@@ -797,7 +890,7 @@
         "name": "WA Admin",
         "whatsappLink": "",
         "x": 130,
-        "y": 1100,
+        "y": 1120,
         "wires": [
             [
                 "71f8bb16f78ae611"
@@ -814,7 +907,7 @@
         "whatsappLiteevent": "messages.upsert",
         "whatsappWebevent": "message",
         "x": 120,
-        "y": 1020,
+        "y": 1060,
         "wires": [
             [
                 "64ccdc99ee90415d"
@@ -834,18 +927,19 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 300,
-        "y": 1100,
+        "y": 1120,
         "wires": []
     },
     {
         "id": "e3baa926886e52cb",
         "type": "group-out",
         "z": "a850bca680aa7206",
+        "d": true,
         "name": "Group Message",
         "whatsappLink": "",
         "gID": "",
-        "x": 1700,
-        "y": 480,
+        "x": 1740,
+        "y": 440,
         "wires": []
     },
     {
@@ -861,7 +955,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 640,
+        "y": 660,
         "wires": [
             [
                 "48639c479673093b"
@@ -880,8 +974,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
-        "y": 480,
+        "x": 1490,
+        "y": 440,
         "wires": [
             [
                 "e3baa926886e52cb"
@@ -895,7 +989,7 @@
         "name": "Kamus Sensor",
         "info": "",
         "x": 120,
-        "y": 1220,
+        "y": 1000,
         "wires": []
     },
     {
@@ -916,7 +1010,7 @@
         "payload": "{\"plant\":\"Sragen\",\"sensors\":{\"SH0206\":{\"name\":\"Scalder 1\"},\"SH0211\":{\"name\":\"Scalder 2\"},\"SH0208\":{\"name\":\"Evisceration Room\"}}}",
         "payloadType": "json",
         "x": 310,
-        "y": 1220,
+        "y": 1000,
         "wires": [
             [
                 "1a5b611ee1027c9a"
@@ -943,7 +1037,7 @@
         "to": "",
         "reg": false,
         "x": 500,
-        "y": 1220,
+        "y": 1000,
         "wires": [
             [
                 "8c7669903cbc19eb"
@@ -963,7 +1057,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 680,
-        "y": 1220,
+        "y": 1000,
         "wires": []
     },
     {
@@ -1010,8 +1104,101 @@
         "name": "Kirim Data Suhu Per Jam",
         "info": "",
         "x": 150,
-        "y": 640,
+        "y": 660,
         "wires": []
+    },
+    {
+        "id": "02a94814dda58112",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Get Data AVG/Plant Local From API",
+        "info": "",
+        "x": 180,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "19d7e9d197be2ab5",
+        "type": "http in",
+        "z": "a850bca680aa7206",
+        "name": "API Get Data Average Local",
+        "url": "/iot/avg/:plant",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 460,
+        "y": 1220,
+        "wires": [
+            [
+                "102698730497cfb2"
+            ]
+        ]
+    },
+    {
+        "id": "102698730497cfb2",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "function get plant code",
+        "func": "let periode = msg.req.query.periode;\n\nlet where = \"\";\n\nif (periode && periode !== \"\") {\n    where = `WHERE DATE_FORMAT(timestamp, '%m-%Y') = '${periode}'`;\n}\n\nmsg.topic = `\nSELECT\n    DATE_FORMAT(timestamp, '%m-%Y') AS periode,\n    sensor_code,\n    AVG(value) AS avg_per_sensor\nFROM sensor_history\n${where}\nGROUP BY\n    DATE_FORMAT(timestamp, '%m-%Y'),\n    sensor_code\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 1220,
+        "wires": [
+            [
+                "e1ce7cd057cb532b"
+            ]
+        ]
+    },
+    {
+        "id": "94997fcb3ce6b801",
+        "type": "http response",
+        "z": "a850bca680aa7206",
+        "name": "HTTP RESPONSE",
+        "statusCode": "",
+        "headers": {},
+        "x": 1270,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "e1ce7cd057cb532b",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "760765ff61568fbe",
+        "name": "Database",
+        "x": 880,
+        "y": 1220,
+        "wires": [
+            [
+                "aac9083434369c84"
+            ]
+        ]
+    },
+    {
+        "id": "aac9083434369c84",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "function parsing json",
+        "func": "let plant_code = msg.req.params.plant;\n\nmsg.payload = {\n    plant: plant_code,\n    data: msg.payload\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1060,
+        "y": 1220,
+        "wires": [
+            [
+                "94997fcb3ce6b801"
+            ]
+        ]
     },
     {
         "id": "abb9824c35e440d9",
