@@ -244,7 +244,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 460,
+        "y": 600,
         "wires": [
             [
                 "48639c479673093b"
@@ -269,7 +269,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 460,
+        "y": 600,
         "wires": [
             [
                 "1b5206eea885dcbd"
@@ -303,7 +303,7 @@
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
         "x": 160,
-        "y": 480,
+        "y": 620,
         "wires": []
     },
     {
@@ -313,7 +313,7 @@
         "name": "Alert",
         "info": "",
         "x": 90,
-        "y": 580,
+        "y": 720,
         "wires": []
     },
     {
@@ -364,7 +364,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 580,
+        "y": 720,
         "wires": [
             [
                 "48639c479673093b"
@@ -391,7 +391,7 @@
         "topic": "",
         "payloadType": "date",
         "x": 470,
-        "y": 580,
+        "y": 720,
         "wires": [
             [
                 "197658740bcf179c"
@@ -416,7 +416,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 500,
+        "y": 640,
         "wires": [
             [
                 "5a3d6822d8636757"
@@ -436,7 +436,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 500,
+        "y": 640,
         "wires": [
             [
                 "48639c479673093b"
@@ -450,7 +450,7 @@
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
         "x": 170,
-        "y": 760,
+        "y": 900,
         "wires": []
     },
     {
@@ -460,7 +460,7 @@
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
         "x": 270,
-        "y": 940,
+        "y": 1080,
         "wires": []
     },
     {
@@ -471,7 +471,7 @@
         "server": "fae6fc6b5acf089c",
         "client": "",
         "x": 1110,
-        "y": 860,
+        "y": 1000,
         "wires": []
     },
     {
@@ -487,7 +487,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 860,
+        "y": 1000,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -503,7 +503,7 @@
         "action": "",
         "pretty": true,
         "x": 630,
-        "y": 860,
+        "y": 1000,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -521,7 +521,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 670,
-        "y": 940,
+        "y": 1080,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -537,7 +537,7 @@
         "action": "",
         "pretty": true,
         "x": 910,
-        "y": 940,
+        "y": 1080,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -557,7 +557,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 940,
+        "y": 1080,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -577,7 +577,7 @@
         "finalize": "",
         "libs": [],
         "x": 1720,
-        "y": 940,
+        "y": 1080,
         "wires": [
             []
         ]
@@ -589,7 +589,7 @@
         "name": "Websocket → Latest Sensor Data",
         "info": "",
         "x": 180,
-        "y": 860,
+        "y": 1000,
         "wires": []
     },
     {
@@ -600,7 +600,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1360,
-        "y": 760,
+        "y": 900,
         "wires": []
     },
     {
@@ -616,7 +616,7 @@
         "finalize": "",
         "libs": [],
         "x": 1090,
-        "y": 760,
+        "y": 900,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -634,7 +634,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 450,
-        "y": 760,
+        "y": 900,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -654,7 +654,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 760,
+        "y": 900,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -669,7 +669,7 @@
         "mydb": "760765ff61568fbe",
         "name": "database",
         "x": 880,
-        "y": 760,
+        "y": 900,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -683,7 +683,7 @@
         "mydb": "760765ff61568fbe",
         "name": "database_hist",
         "x": 1480,
-        "y": 940,
+        "y": 1080,
         "wires": [
             [
                 "93ea4af6d0509d68"
@@ -858,7 +858,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 660,
+        "y": 800,
         "wires": [
             [
                 "f8d7912d9566e9d6"
@@ -879,7 +879,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 300,
-        "y": 1060,
+        "y": 1180,
         "wires": []
     },
     {
@@ -890,7 +890,7 @@
         "name": "WA Admin",
         "whatsappLink": "",
         "x": 130,
-        "y": 1120,
+        "y": 1260,
         "wires": [
             [
                 "71f8bb16f78ae611"
@@ -907,7 +907,7 @@
         "whatsappLiteevent": "messages.upsert",
         "whatsappWebevent": "message",
         "x": 120,
-        "y": 1060,
+        "y": 1180,
         "wires": [
             [
                 "64ccdc99ee90415d"
@@ -927,7 +927,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 300,
-        "y": 1120,
+        "y": 1260,
         "wires": []
     },
     {
@@ -938,8 +938,8 @@
         "name": "Group Message",
         "whatsappLink": "",
         "gID": "",
-        "x": 1740,
-        "y": 440,
+        "x": 1700,
+        "y": 480,
         "wires": []
     },
     {
@@ -955,7 +955,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 660,
+        "y": 800,
         "wires": [
             [
                 "48639c479673093b"
@@ -974,8 +974,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1490,
-        "y": 440,
+        "x": 1470,
+        "y": 480,
         "wires": [
             [
                 "e3baa926886e52cb"
@@ -989,7 +989,7 @@
         "name": "Kamus Sensor",
         "info": "",
         "x": 120,
-        "y": 1000,
+        "y": 1220,
         "wires": []
     },
     {
@@ -1010,7 +1010,7 @@
         "payload": "{\"plant\":\"Sragen\",\"sensors\":{\"SH0206\":{\"name\":\"Scalder 1\"},\"SH0211\":{\"name\":\"Scalder 2\"},\"SH0208\":{\"name\":\"Evisceration Room\"}}}",
         "payloadType": "json",
         "x": 310,
-        "y": 1000,
+        "y": 1220,
         "wires": [
             [
                 "1a5b611ee1027c9a"
@@ -1037,7 +1037,7 @@
         "to": "",
         "reg": false,
         "x": 500,
-        "y": 1000,
+        "y": 1220,
         "wires": [
             [
                 "8c7669903cbc19eb"
@@ -1057,7 +1057,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 680,
-        "y": 1000,
+        "y": 1220,
         "wires": []
     },
     {
@@ -1104,7 +1104,7 @@
         "name": "Kirim Data Suhu Per Jam",
         "info": "",
         "x": 150,
-        "y": 660,
+        "y": 800,
         "wires": []
     },
     {
@@ -1113,8 +1113,8 @@
         "z": "a850bca680aa7206",
         "name": "Get Data AVG/Plant Local From API",
         "info": "",
-        "x": 180,
-        "y": 1220,
+        "x": 140,
+        "y": 1360,
         "wires": []
     },
     {
@@ -1122,16 +1122,17 @@
         "type": "http in",
         "z": "a850bca680aa7206",
         "name": "API Get Data Average Local",
-        "url": "/iot/avg/:plant",
+        "url": "/iot/local/response_avg_temp",
         "method": "get",
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 460,
-        "y": 1220,
+        "x": 440,
+        "y": 1360,
         "wires": [
             [
-                "102698730497cfb2"
+                "778f2b06990e6eea",
+                "ce8644a823ad21bd"
             ]
         ]
     },
@@ -1139,19 +1140,20 @@
         "id": "102698730497cfb2",
         "type": "function",
         "z": "a850bca680aa7206",
-        "name": "function get plant code",
-        "func": "let periode = msg.req.query.periode;\n\nlet where = \"\";\n\nif (periode && periode !== \"\") {\n    where = `WHERE DATE_FORMAT(timestamp, '%m-%Y') = '${periode}'`;\n}\n\nmsg.topic = `\nSELECT\n    DATE_FORMAT(timestamp, '%m-%Y') AS periode,\n    sensor_code,\n    AVG(value) AS avg_per_sensor\nFROM sensor_history\n${where}\nGROUP BY\n    DATE_FORMAT(timestamp, '%m-%Y'),\n    sensor_code\n`;\n\nreturn msg;",
+        "name": "function get plant/sensor average",
+        "func": "let periode = msg.req.query.periode;\n\nlet where = \"\";\n\nif (periode) {\n    where = `WHERE DATE_FORMAT(timestamp, '%m-%Y') = '${periode}'`;\n}\n\nmsg.topic = `\nSELECT\n    DATE_FORMAT(timestamp, '%m-%Y') AS periode,\n    sensor_code,\n    AVG(value) AS avg_per_sensor\nFROM sensor_history\n${where}\nGROUP BY\n    DATE_FORMAT(timestamp, '%m-%Y'),\n    sensor_code\nORDER BY\n    periode,\n    sensor_code\n`;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 700,
-        "y": 1220,
+        "x": 1120,
+        "y": 1360,
         "wires": [
             [
-                "e1ce7cd057cb532b"
+                "e1ce7cd057cb532b",
+                "c9d53889c86aa09b"
             ]
         ]
     },
@@ -1162,8 +1164,8 @@
         "name": "HTTP RESPONSE",
         "statusCode": "",
         "headers": {},
-        "x": 1270,
-        "y": 1220,
+        "x": 1550,
+        "y": 1360,
         "wires": []
     },
     {
@@ -1172,33 +1174,85 @@
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
         "name": "Database",
-        "x": 880,
-        "y": 1220,
+        "x": 1360,
+        "y": 1360,
         "wires": [
             [
-                "aac9083434369c84"
+                "94997fcb3ce6b801",
+                "351c7ffe01bd5b7b"
             ]
         ]
     },
     {
-        "id": "aac9083434369c84",
+        "id": "778f2b06990e6eea",
         "type": "function",
         "z": "a850bca680aa7206",
-        "name": "function parsing json",
-        "func": "let plant_code = msg.req.params.plant;\n\nmsg.payload = {\n    plant: plant_code,\n    data: msg.payload\n};\n\nreturn msg;",
+        "name": "Function Authorization Nasional -> Local",
+        "func": "let auth = msg.req.headers.authorization;\n\n\n    let credential = Buffer.from(\n        auth.split(\" \")[1],\n        \"base64\"\n    ).toString();\n\n    let [username, password] = credential.split(\":\");\n\n    msg.username = username;\n    msg.password = password;\n\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1060,
-        "y": 1220,
+        "x": 760,
+        "y": 1360,
         "wires": [
             [
-                "94997fcb3ce6b801"
+                "102698730497cfb2"
             ]
         ]
+    },
+    {
+        "id": "ce8644a823ad21bd",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "req.headers",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 700,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "351c7ffe01bd5b7b",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug DB",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1540,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "c9d53889c86aa09b",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug SQL",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 1460,
+        "wires": []
     },
     {
         "id": "abb9824c35e440d9",
