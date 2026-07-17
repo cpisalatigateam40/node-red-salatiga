@@ -244,7 +244,7 @@
         "finalize": "",
         "libs": [],
         "x": 790,
-        "y": 600,
+        "y": 440,
         "wires": [
             [
                 "48639c479673093b"
@@ -269,10 +269,11 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 600,
+        "y": 460,
         "wires": [
             [
-                "1b5206eea885dcbd"
+                "1b5206eea885dcbd",
+                "5a3d6822d8636757"
             ]
         ]
     },
@@ -303,7 +304,7 @@
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
         "x": 160,
-        "y": 620,
+        "y": 460,
         "wires": []
     },
     {
@@ -313,7 +314,7 @@
         "name": "Alert",
         "info": "",
         "x": 90,
-        "y": 720,
+        "y": 560,
         "wires": []
     },
     {
@@ -326,8 +327,7 @@
         "y": 380,
         "wires": [
             [
-                "b2423fbb3bb4d0b2",
-                "66dd32705a9b142b"
+                "b2423fbb3bb4d0b2"
             ]
         ]
     },
@@ -364,7 +364,7 @@
         "finalize": "",
         "libs": [],
         "x": 810,
-        "y": 720,
+        "y": 560,
         "wires": [
             [
                 "48639c479673093b"
@@ -391,35 +391,10 @@
         "topic": "",
         "payloadType": "date",
         "x": 470,
-        "y": 720,
+        "y": 560,
         "wires": [
             [
                 "197658740bcf179c"
-            ]
-        ]
-    },
-    {
-        "id": "60faa96c9c46c083",
-        "type": "inject",
-        "z": "a850bca680aa7206",
-        "name": "Inject per hari",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "10 00 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 440,
-        "y": 640,
-        "wires": [
-            [
-                "5a3d6822d8636757"
             ]
         ]
     },
@@ -436,7 +411,7 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 640,
+        "y": 480,
         "wires": [
             [
                 "48639c479673093b"
@@ -450,7 +425,7 @@
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
         "x": 170,
-        "y": 900,
+        "y": 740,
         "wires": []
     },
     {
@@ -460,7 +435,7 @@
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
         "x": 270,
-        "y": 1080,
+        "y": 920,
         "wires": []
     },
     {
@@ -471,7 +446,7 @@
         "server": "fae6fc6b5acf089c",
         "client": "",
         "x": 1110,
-        "y": 1000,
+        "y": 840,
         "wires": []
     },
     {
@@ -487,7 +462,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 1000,
+        "y": 840,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -503,7 +478,7 @@
         "action": "",
         "pretty": true,
         "x": 630,
-        "y": 1000,
+        "y": 840,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -521,7 +496,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 670,
-        "y": 1080,
+        "y": 920,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -537,7 +512,7 @@
         "action": "",
         "pretty": true,
         "x": 910,
-        "y": 1080,
+        "y": 920,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -557,7 +532,7 @@
         "finalize": "",
         "libs": [],
         "x": 1190,
-        "y": 1080,
+        "y": 920,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -577,7 +552,7 @@
         "finalize": "",
         "libs": [],
         "x": 1720,
-        "y": 1080,
+        "y": 920,
         "wires": [
             []
         ]
@@ -589,7 +564,7 @@
         "name": "Websocket → Latest Sensor Data",
         "info": "",
         "x": 180,
-        "y": 1000,
+        "y": 840,
         "wires": []
     },
     {
@@ -600,7 +575,7 @@
         "statusCode": "",
         "headers": {},
         "x": 1360,
-        "y": 900,
+        "y": 740,
         "wires": []
     },
     {
@@ -616,7 +591,7 @@
         "finalize": "",
         "libs": [],
         "x": 1090,
-        "y": 900,
+        "y": 740,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -634,7 +609,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 450,
-        "y": 900,
+        "y": 740,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -654,7 +629,7 @@
         "finalize": "",
         "libs": [],
         "x": 670,
-        "y": 900,
+        "y": 740,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -669,7 +644,7 @@
         "mydb": "760765ff61568fbe",
         "name": "database",
         "x": 880,
-        "y": 900,
+        "y": 740,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -683,7 +658,7 @@
         "mydb": "760765ff61568fbe",
         "name": "database_hist",
         "x": 1480,
-        "y": 1080,
+        "y": 920,
         "wires": [
             [
                 "93ea4af6d0509d68"
@@ -694,8 +669,8 @@
         "id": "76efd0daf1d7c3df",
         "type": "comment",
         "z": "a850bca680aa7206",
-        "name": "Versi 1.10",
-        "info": "",
+        "name": "Versi 1.11",
+        "info": "liat detail versi ada di iot hub (directus)",
         "x": 100,
         "y": 100,
         "wires": []
@@ -858,7 +833,7 @@
         "payload": "",
         "payloadType": "date",
         "x": 440,
-        "y": 800,
+        "y": 640,
         "wires": [
             [
                 "f8d7912d9566e9d6"
@@ -878,8 +853,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 300,
-        "y": 1180,
+        "x": 480,
+        "y": 1080,
         "wires": []
     },
     {
@@ -889,8 +864,8 @@
         "d": true,
         "name": "WA Admin",
         "whatsappLink": "",
-        "x": 130,
-        "y": 1260,
+        "x": 310,
+        "y": 1140,
         "wires": [
             [
                 "71f8bb16f78ae611"
@@ -906,8 +881,8 @@
         "whatsappLink": "",
         "whatsappLiteevent": "messages.upsert",
         "whatsappWebevent": "message",
-        "x": 120,
-        "y": 1180,
+        "x": 300,
+        "y": 1080,
         "wires": [
             [
                 "64ccdc99ee90415d"
@@ -926,8 +901,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 300,
-        "y": 1260,
+        "x": 480,
+        "y": 1140,
         "wires": []
     },
     {
@@ -938,8 +913,8 @@
         "name": "Group Message",
         "whatsappLink": "",
         "gID": "",
-        "x": 1700,
-        "y": 480,
+        "x": 580,
+        "y": 1200,
         "wires": []
     },
     {
@@ -955,7 +930,7 @@
         "finalize": "",
         "libs": [],
         "x": 840,
-        "y": 800,
+        "y": 640,
         "wires": [
             [
                 "48639c479673093b"
@@ -974,8 +949,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1470,
-        "y": 480,
+        "x": 350,
+        "y": 1200,
         "wires": [
             [
                 "e3baa926886e52cb"
@@ -989,7 +964,7 @@
         "name": "Kamus Sensor",
         "info": "",
         "x": 120,
-        "y": 1220,
+        "y": 1000,
         "wires": []
     },
     {
@@ -1010,7 +985,7 @@
         "payload": "{\"plant\":\"Sragen\",\"sensors\":{\"SH0206\":{\"name\":\"Scalder 1\"},\"SH0211\":{\"name\":\"Scalder 2\"},\"SH0208\":{\"name\":\"Evisceration Room\"}}}",
         "payloadType": "json",
         "x": 310,
-        "y": 1220,
+        "y": 1000,
         "wires": [
             [
                 "1a5b611ee1027c9a"
@@ -1037,7 +1012,7 @@
         "to": "",
         "reg": false,
         "x": 500,
-        "y": 1220,
+        "y": 1000,
         "wires": [
             [
                 "8c7669903cbc19eb"
@@ -1057,7 +1032,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 680,
-        "y": 1220,
+        "y": 1000,
         "wires": []
     },
     {
@@ -1101,10 +1076,10 @@
         "id": "1b9e778e32fb2612",
         "type": "comment",
         "z": "a850bca680aa7206",
-        "name": "Kirim Data Suhu Per Jam",
+        "name": "Kirim Whatsapp Data Suhu Per Jam",
         "info": "",
-        "x": 150,
-        "y": 800,
+        "x": 180,
+        "y": 640,
         "wires": []
     },
     {
@@ -1113,8 +1088,8 @@
         "z": "a850bca680aa7206",
         "name": "Get Data AVG/Plant Local From API",
         "info": "",
-        "x": 140,
-        "y": 1360,
+        "x": 180,
+        "y": 1280,
         "wires": []
     },
     {
@@ -1127,8 +1102,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 440,
-        "y": 1360,
+        "x": 480,
+        "y": 1280,
         "wires": [
             [
                 "778f2b06990e6eea",
@@ -1148,8 +1123,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1120,
-        "y": 1360,
+        "x": 1160,
+        "y": 1280,
         "wires": [
             [
                 "e1ce7cd057cb532b",
@@ -1164,8 +1139,8 @@
         "name": "HTTP RESPONSE",
         "statusCode": "",
         "headers": {},
-        "x": 1550,
-        "y": 1360,
+        "x": 1590,
+        "y": 1280,
         "wires": []
     },
     {
@@ -1174,8 +1149,8 @@
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
         "name": "Database",
-        "x": 1360,
-        "y": 1360,
+        "x": 1400,
+        "y": 1280,
         "wires": [
             [
                 "94997fcb3ce6b801",
@@ -1195,8 +1170,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 760,
-        "y": 1360,
+        "x": 800,
+        "y": 1280,
         "wires": [
             [
                 "102698730497cfb2"
@@ -1216,8 +1191,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 700,
-        "y": 1420,
+        "x": 720,
+        "y": 1340,
         "wires": []
     },
     {
@@ -1233,8 +1208,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1540,
-        "y": 1420,
+        "x": 1600,
+        "y": 1340,
         "wires": []
     },
     {
@@ -1250,8 +1225,18 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1390,
-        "y": 1460,
+        "x": 1410,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "88e4eb0267a4ae86",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Config Whatsapp",
+        "info": "",
+        "x": 120,
+        "y": 1080,
         "wires": []
     },
     {
