@@ -327,7 +327,8 @@
         "y": 380,
         "wires": [
             [
-                "b2423fbb3bb4d0b2"
+                "b2423fbb3bb4d0b2",
+                "66dd32705a9b142b"
             ]
         ]
     },
@@ -656,8 +657,8 @@
         "type": "mysql",
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
-        "name": "database_hist",
-        "x": 1480,
+        "name": "database",
+        "x": 1460,
         "y": 920,
         "wires": [
             [
@@ -793,8 +794,7 @@
         "y": 300,
         "wires": [
             [
-                "f775e65ba0493565",
-                "77634b11134462c3"
+                "f775e65ba0493565"
             ]
         ]
     },
@@ -906,18 +906,6 @@
         "wires": []
     },
     {
-        "id": "e3baa926886e52cb",
-        "type": "group-out",
-        "z": "a850bca680aa7206",
-        "d": true,
-        "name": "Group Message",
-        "whatsappLink": "",
-        "gID": "",
-        "x": 580,
-        "y": 1200,
-        "wires": []
-    },
-    {
         "id": "f8d7912d9566e9d6",
         "type": "function",
         "z": "a850bca680aa7206",
@@ -934,26 +922,6 @@
         "wires": [
             [
                 "48639c479673093b"
-            ]
-        ]
-    },
-    {
-        "id": "66dd32705a9b142b",
-        "type": "function",
-        "z": "a850bca680aa7206",
-        "name": "Template Report Hourly",
-        "func": "if (msg.isTimerReport !== true || !Array.isArray(msg.payload)) {\n    return null;\n}\n\n// 1. Ambil Metadata dari Global\nlet metadata = flow.get(\"sensor_metadata\");\nif (!metadata || !metadata.sensors || Object.keys(metadata.sensors).length === 0) {\n    node.error(\"Metadata atau list sensors kosong saat merender laporan\", msg);\n    return null;\n}\n\nconst rows = msg.payload;\nconst waktuWIB = new Date().toLocaleString('id-ID', {\n    timeZone: 'Asia/Jakarta',\n    hour: '2-digit', minute: '2-digit', hour12: false\n});\n\n// 2. Ambil nama Plant langsung dari properti tingkat atas\nconst namaPlant = metadata.plant || \"UNDEFINED\";\n\n// 3. Susun Header Laporan secara Dinamis\nlet report = `📊 *REKAPITULASI SUHU: PLANT ${namaPlant.toUpperCase()}* 📊\\n`;\nreport += \"--------------------------\\n\\n\";\n\n// 4. Loop Data berdasarkan konfigurasi metadata.sensors\nObject.keys(metadata.sensors).forEach((code) => {\n    const info = metadata.sensors[code];\n    const rowData = rows.find(r => r.sensor_code === code);\n    let teksSuhu = \"_Tidak ada data_\";\n\n    if (rowData) {\n        const nilaiSuhu = parseFloat(rowData.value || 0);\n\n        if (nilaiSuhu < 850) {\n            teksSuhu = `*${nilaiSuhu.toFixed(1).replace('.', ',')} °C*`;\n        } else {\n            teksSuhu = \"_Sensor Off (850)_\";\n        }\n    }\n\n    // Format pengiriman pesan ke WA\n    report += `*${info.name} (${code})*\\n`;\n    report += `Suhu : ${teksSuhu}\\n\\n`;\n});\n\nreport += \"--------------------------\\n\";\nreport += `⏰ _Update Otomatis: ${waktuWIB} WIB_`;\n\n// 5. Masukkan teks laporan ke payload utama\nmsg.payload = report;\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Template Siap: \" + waktuWIB });\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 1200,
-        "wires": [
-            [
-                "e3baa926886e52cb"
             ]
         ]
     },
@@ -1056,23 +1024,6 @@
         "wires": []
     },
     {
-        "id": "77634b11134462c3",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "debug 3",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 640,
-        "y": 220,
-        "wires": []
-    },
-    {
         "id": "1b9e778e32fb2612",
         "type": "comment",
         "z": "a850bca680aa7206",
@@ -1089,7 +1040,7 @@
         "name": "Get Data AVG Local from API",
         "info": "",
         "x": 160,
-        "y": 1280,
+        "y": 1220,
         "wires": []
     },
     {
@@ -1103,7 +1054,7 @@
         "skipBodyParsing": false,
         "swaggerDoc": "",
         "x": 420,
-        "y": 1280,
+        "y": 1220,
         "wires": [
             [
                 "778f2b06990e6eea",
@@ -1124,11 +1075,11 @@
         "finalize": "",
         "libs": [],
         "x": 900,
-        "y": 1280,
+        "y": 1220,
         "wires": [
             [
-                "e1ce7cd057cb532b",
-                "c9d53889c86aa09b"
+                "c9d53889c86aa09b",
+                "f9214818e453264b"
             ]
         ]
     },
@@ -1140,23 +1091,8 @@
         "statusCode": "",
         "headers": {},
         "x": 1350,
-        "y": 1280,
+        "y": 1220,
         "wires": []
-    },
-    {
-        "id": "e1ce7cd057cb532b",
-        "type": "mysql",
-        "z": "a850bca680aa7206",
-        "mydb": "760765ff61568fbe",
-        "name": "Database",
-        "x": 1100,
-        "y": 1280,
-        "wires": [
-            [
-                "94997fcb3ce6b801",
-                "351c7ffe01bd5b7b"
-            ]
-        ]
     },
     {
         "id": "778f2b06990e6eea",
@@ -1171,7 +1107,7 @@
         "finalize": "",
         "libs": [],
         "x": 660,
-        "y": 1280,
+        "y": 1220,
         "wires": [
             [
                 "102698730497cfb2"
@@ -1192,7 +1128,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 620,
-        "y": 1340,
+        "y": 1280,
         "wires": []
     },
     {
@@ -1209,7 +1145,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1320,
-        "y": 1340,
+        "y": 1280,
         "wires": []
     },
     {
@@ -1226,7 +1162,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 1110,
-        "y": 1340,
+        "y": 1280,
         "wires": []
     },
     {
@@ -1238,6 +1174,53 @@
         "x": 120,
         "y": 1080,
         "wires": []
+    },
+    {
+        "id": "e3baa926886e52cb",
+        "type": "group-out",
+        "z": "a850bca680aa7206",
+        "d": true,
+        "name": "Group Message",
+        "whatsappLink": "",
+        "gID": "",
+        "x": 1740,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "66dd32705a9b142b",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Template Report Hourly",
+        "func": "if (msg.isTimerReport !== true || !Array.isArray(msg.payload)) {\n    return null;\n}\n\n// 1. Ambil Metadata dari Global\nlet metadata = flow.get(\"sensor_metadata\");\nif (!metadata || !metadata.sensors || Object.keys(metadata.sensors).length === 0) {\n    node.error(\"Metadata atau list sensors kosong saat merender laporan\", msg);\n    return null;\n}\n\nconst rows = msg.payload;\nconst waktuWIB = new Date().toLocaleString('id-ID', {\n    timeZone: 'Asia/Jakarta',\n    hour: '2-digit', minute: '2-digit', hour12: false\n});\n\n// 2. Ambil nama Plant langsung dari properti tingkat atas\nconst namaPlant = metadata.plant || \"UNDEFINED\";\n\n// 3. Susun Header Laporan secara Dinamis\nlet report = `📊 *REKAPITULASI SUHU: PLANT ${namaPlant.toUpperCase()}* 📊\\n`;\nreport += \"--------------------------\\n\\n\";\n\n// 4. Loop Data berdasarkan konfigurasi metadata.sensors\nObject.keys(metadata.sensors).forEach((code) => {\n    const info = metadata.sensors[code];\n    const rowData = rows.find(r => r.sensor_code === code);\n    let teksSuhu = \"_Tidak ada data_\";\n\n    if (rowData) {\n        const nilaiSuhu = parseFloat(rowData.value || 0);\n\n        if (nilaiSuhu < 850) {\n            teksSuhu = `*${nilaiSuhu.toFixed(1).replace('.', ',')} °C*`;\n        } else {\n            teksSuhu = \"_Sensor Off (850)_\";\n        }\n    }\n\n    // Format pengiriman pesan ke WA\n    report += `*${info.name} (${code})*\\n`;\n    report += `Suhu : ${teksSuhu}\\n\\n`;\n});\n\nreport += \"--------------------------\\n\";\nreport += `⏰ _Update Otomatis: ${waktuWIB} WIB_`;\n\n// 5. Masukkan teks laporan ke payload utama\nmsg.payload = report;\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Template Siap: \" + waktuWIB });\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1510,
+        "y": 480,
+        "wires": [
+            [
+                "e3baa926886e52cb"
+            ]
+        ]
+    },
+    {
+        "id": "f9214818e453264b",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "760765ff61568fbe",
+        "name": "database",
+        "x": 1120,
+        "y": 1220,
+        "wires": [
+            [
+                "94997fcb3ce6b801",
+                "351c7ffe01bd5b7b"
+            ]
+        ]
     },
     {
         "id": "abb9824c35e440d9",
