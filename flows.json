@@ -3,7 +3,7 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Flow IoT",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -53,68 +53,6 @@
         "sessionExpiry": ""
     },
     {
-        "id": "369aee6f0e8e1c5c",
-        "type": "mqtt-broker",
-        "name": "MQTT SGN",
-        "broker": "10.39.8.42",
-        "port": 1883,
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": 4,
-        "keepalive": 60,
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
-        "id": "525d33c868ab9d12",
-        "type": "mqtt-broker",
-        "name": "MQTT Salatiga",
-        "broker": "10.71.3.27",
-        "port": "1884",
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": 4,
-        "keepalive": 60,
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
         "id": "760765ff61568fbe",
         "type": "MySQLdatabase",
         "name": "",
@@ -125,37 +63,6 @@
         "charset": "UTF8"
     },
     {
-        "id": "89bcc32bf26bf3d5",
-        "type": "mqtt-broker",
-        "name": "",
-        "broker": "MQTT Sragen",
-        "port": 1883,
-        "clientid": "",
-        "autoConnect": true,
-        "usetls": false,
-        "protocolVersion": 4,
-        "keepalive": 60,
-        "cleansession": true,
-        "autoUnsubscribe": true,
-        "birthTopic": "",
-        "birthQos": "0",
-        "birthRetain": "false",
-        "birthPayload": "",
-        "birthMsg": {},
-        "closeTopic": "",
-        "closeQos": "0",
-        "closeRetain": "false",
-        "closePayload": "",
-        "closeMsg": {},
-        "willTopic": "",
-        "willQos": "0",
-        "willRetain": "false",
-        "willPayload": "",
-        "willMsg": {},
-        "userProps": "",
-        "sessionExpiry": ""
-    },
-    {
         "id": "f775e65ba0493565",
         "type": "json",
         "z": "a850bca680aa7206",
@@ -163,8 +70,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 490,
-        "y": 320,
+        "x": 530,
+        "y": 440,
         "wires": [
             [
                 "4599b399b3698075"
@@ -183,8 +90,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 940,
-        "y": 400,
+        "x": 980,
+        "y": 520,
         "wires": [
             [
                 "48639c479673093b"
@@ -203,8 +110,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 810,
-        "y": 460,
+        "x": 850,
+        "y": 580,
         "wires": [
             [
                 "48639c479673093b"
@@ -228,8 +135,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 460,
-        "y": 480,
+        "x": 500,
+        "y": 600,
         "wires": [
             [
                 "1b5206eea885dcbd",
@@ -243,8 +150,8 @@
         "z": "a850bca680aa7206",
         "name": "MQTT → Realtime DB",
         "info": " - Mendengarkan data sensor dari MQTT broker.\n - Parse payload dan insert ke tabel sensor_realtime.\n - Tujuan: menyimpan data mentah (realtime, high-resolution).",
-        "x": 160,
-        "y": 320,
+        "x": 200,
+        "y": 440,
         "wires": []
     },
     {
@@ -253,8 +160,8 @@
         "z": "a850bca680aa7206",
         "name": "Interval → Tabel History",
         "info": " - Inject node jalan setiap interval.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_history.\n - Tujuan: menyimpan data jangka panjang dalam resolusi lebih rendah.",
-        "x": 160,
-        "y": 400,
+        "x": 200,
+        "y": 520,
         "wires": []
     },
     {
@@ -263,8 +170,8 @@
         "z": "a850bca680aa7206",
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
-        "x": 180,
-        "y": 480,
+        "x": 220,
+        "y": 600,
         "wires": []
     },
     {
@@ -273,8 +180,8 @@
         "z": "a850bca680aa7206",
         "name": "Alert",
         "info": "",
-        "x": 110,
-        "y": 580,
+        "x": 150,
+        "y": 700,
         "wires": []
     },
     {
@@ -283,12 +190,10 @@
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
         "name": "database",
-        "x": 1300,
-        "y": 400,
+        "x": 1340,
+        "y": 520,
         "wires": [
-            [
-                "66dd32705a9b142b"
-            ]
+            []
         ]
     },
     {
@@ -303,8 +208,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 940,
-        "y": 340,
+        "x": 980,
+        "y": 460,
         "wires": [
             [
                 "48639c479673093b"
@@ -323,8 +228,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
-        "y": 580,
+        "x": 870,
+        "y": 700,
         "wires": [
             [
                 "48639c479673093b"
@@ -350,8 +255,8 @@
         "onceDelay": "2",
         "topic": "",
         "payloadType": "date",
-        "x": 490,
-        "y": 580,
+        "x": 530,
+        "y": 700,
         "wires": [
             [
                 "197658740bcf179c"
@@ -370,8 +275,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 800,
-        "y": 500,
+        "x": 840,
+        "y": 620,
         "wires": [
             [
                 "48639c479673093b"
@@ -384,8 +289,8 @@
         "z": "a850bca680aa7206",
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
-        "x": 190,
-        "y": 760,
+        "x": 230,
+        "y": 780,
         "wires": []
     },
     {
@@ -394,8 +299,8 @@
         "z": "a850bca680aa7206",
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
-        "x": 290,
-        "y": 940,
+        "x": 330,
+        "y": 960,
         "wires": []
     },
     {
@@ -405,8 +310,8 @@
         "name": "",
         "server": "fae6fc6b5acf089c",
         "client": "",
-        "x": 1130,
-        "y": 860,
+        "x": 1170,
+        "y": 880,
         "wires": []
     },
     {
@@ -421,8 +326,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
-        "y": 860,
+        "x": 900,
+        "y": 880,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -437,8 +342,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 650,
-        "y": 860,
+        "x": 690,
+        "y": 880,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -455,8 +360,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 690,
-        "y": 940,
+        "x": 730,
+        "y": 960,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -471,8 +376,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 930,
-        "y": 940,
+        "x": 970,
+        "y": 960,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -491,8 +396,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1210,
-        "y": 940,
+        "x": 1250,
+        "y": 960,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -511,8 +416,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1740,
-        "y": 940,
+        "x": 1720,
+        "y": 960,
         "wires": [
             []
         ]
@@ -523,8 +428,8 @@
         "z": "a850bca680aa7206",
         "name": "Websocket → Latest Sensor Data",
         "info": "",
-        "x": 200,
-        "y": 860,
+        "x": 240,
+        "y": 880,
         "wires": []
     },
     {
@@ -534,8 +439,8 @@
         "name": "HTTP Response",
         "statusCode": "",
         "headers": {},
-        "x": 1380,
-        "y": 760,
+        "x": 1420,
+        "y": 780,
         "wires": []
     },
     {
@@ -550,8 +455,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1110,
-        "y": 760,
+        "x": 1150,
+        "y": 780,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -568,8 +473,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 470,
-        "y": 760,
+        "x": 510,
+        "y": 780,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -588,8 +493,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
-        "y": 760,
+        "x": 730,
+        "y": 780,
         "wires": [
             [
                 "a1042de7bf32f7c3"
@@ -602,8 +507,8 @@
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
         "name": "database",
-        "x": 900,
-        "y": 760,
+        "x": 940,
+        "y": 780,
         "wires": [
             [
                 "b9b718c0bb38497d"
@@ -616,8 +521,8 @@
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
         "name": "database",
-        "x": 1480,
-        "y": 940,
+        "x": 1520,
+        "y": 960,
         "wires": [
             [
                 "93ea4af6d0509d68"
@@ -630,8 +535,8 @@
         "z": "a850bca680aa7206",
         "name": "Versi 1.12",
         "info": "liat detail versi ada di iot hub (directus)\nhttp://10.68.1.220:8055/",
-        "x": 120,
-        "y": 80,
+        "x": 160,
+        "y": 180,
         "wires": []
     },
     {
@@ -648,8 +553,8 @@
         "correl": "",
         "expiry": "",
         "broker": "95030b5bf43fa98e",
-        "x": 1120,
-        "y": 220,
+        "x": 1160,
+        "y": 340,
         "wires": []
     },
     {
@@ -664,8 +569,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 220,
+        "x": 930,
+        "y": 340,
         "wires": [
             [
                 "72190acd9154e130"
@@ -684,8 +589,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 650,
-        "y": 320,
+        "x": 690,
+        "y": 440,
         "wires": [
             [
                 "489079518de56347",
@@ -707,8 +612,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 890,
-        "y": 280,
+        "x": 930,
+        "y": 400,
         "wires": [
             [
                 "71a6110c68366f79"
@@ -727,8 +632,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1100,
-        "y": 280,
+        "x": 1140,
+        "y": 400,
         "wires": [
             [
                 "48639c479673093b"
@@ -743,13 +648,13 @@
         "topic": "data/SLT/#",
         "qos": "2",
         "datatype": "auto",
-        "broker": "525d33c868ab9d12",
+        "broker": "",
         "nl": false,
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 330,
-        "y": 320,
+        "x": 370,
+        "y": 440,
         "wires": [
             [
                 "f775e65ba0493565"
@@ -757,209 +662,13 @@
         ]
     },
     {
-        "id": "5c2f4215a5460946",
-        "type": "inject",
-        "z": "a850bca680aa7206",
-        "name": "Inject Per Jam",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "0 0-23 * * *",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 460,
-        "y": 660,
-        "wires": [
-            [
-                "f8d7912d9566e9d6"
-            ]
-        ]
-    },
-    {
-        "id": "64ccdc99ee90415d",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "debug 5",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 500,
-        "y": 1100,
-        "wires": []
-    },
-    {
-        "id": "3d60453758a77ccd",
-        "type": "admin",
-        "z": "a850bca680aa7206",
-        "name": "WA Admin",
-        "whatsappLink": "",
-        "x": 330,
-        "y": 1160,
-        "wires": [
-            [
-                "71f8bb16f78ae611"
-            ]
-        ]
-    },
-    {
-        "id": "cabce490dfd6655d",
-        "type": "chats-in",
-        "z": "a850bca680aa7206",
-        "name": "Chats In",
-        "whatsappLink": "",
-        "whatsappLiteevent": "messages.upsert",
-        "whatsappWebevent": "message",
-        "x": 320,
-        "y": 1100,
-        "wires": [
-            [
-                "64ccdc99ee90415d"
-            ]
-        ]
-    },
-    {
-        "id": "71f8bb16f78ae611",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "debug 6",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 500,
-        "y": 1160,
-        "wires": []
-    },
-    {
-        "id": "f8d7912d9566e9d6",
-        "type": "function",
-        "z": "a850bca680aa7206",
-        "name": "Report Hourly",
-        "func": "// 1. Ambil metadata dari memori Global\nlet metadata = flow.get(\"sensor_metadata\");\n\n// Cegah error jika metadata atau objek sensors belum terdefinisi\nif (!metadata || !metadata.sensors || Object.keys(metadata.sensors).length === 0) {\n    node.error(\"sensor_metadata atau list sensors belum disetting di Global Context\", msg);\n    return null;\n}\n\n// Ambil kunci sensor dari properti .sensors\nconst codes = Object.keys(metadata.sensors);\nconst sqlCodes = codes.map(c => `'${c}'`).join(',');\n\nmsg.isTimerReport = true;\n\n// 2. Bangun Query dinamis berdasarkan sensor yang aktif\nmsg.topic = `\n    SELECT t1.* FROM sensor_realtime t1\n    INNER JOIN (\n        SELECT sensor_code, MAX(id) as mid\n        FROM sensor_realtime\n        WHERE sensor_code IN (${sqlCodes})\n        GROUP BY sensor_code\n    ) t2 ON t1.id = t2.mid\n    ORDER BY t1.sensor_code ASC;\n`;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 860,
-        "y": 660,
-        "wires": [
-            [
-                "48639c479673093b"
-            ]
-        ]
-    },
-    {
-        "id": "a839592221c0b9b5",
-        "type": "comment",
-        "z": "a850bca680aa7206",
-        "name": "Kamus Sensor",
-        "info": "",
-        "x": 140,
-        "y": 1020,
-        "wires": []
-    },
-    {
-        "id": "03a55c22b97ccd50",
-        "type": "inject",
-        "z": "a850bca680aa7206",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "{\"plant\":\"Sragen\",\"sensors\":{\"SH0206\":{\"name\":\"Scalder 1\"},\"SH0211\":{\"name\":\"Scalder 2\"},\"SH0208\":{\"name\":\"Evisceration Room\"}}}",
-        "payloadType": "json",
-        "x": 330,
-        "y": 1020,
-        "wires": [
-            [
-                "1a5b611ee1027c9a"
-            ]
-        ]
-    },
-    {
-        "id": "1a5b611ee1027c9a",
-        "type": "change",
-        "z": "a850bca680aa7206",
-        "name": "Change Sensor",
-        "rules": [
-            {
-                "t": "set",
-                "p": "sensor_metadata",
-                "pt": "flow",
-                "to": "payload",
-                "tot": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 520,
-        "y": 1020,
-        "wires": [
-            [
-                "8c7669903cbc19eb"
-            ]
-        ]
-    },
-    {
-        "id": "8c7669903cbc19eb",
-        "type": "debug",
-        "z": "a850bca680aa7206",
-        "name": "debug 7",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 700,
-        "y": 1020,
-        "wires": []
-    },
-    {
         "id": "baada4a4e38555b6",
         "type": "comment",
         "z": "a850bca680aa7206",
         "name": "######################## README (Buka ini terlebih dahulu) ########################",
-        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n 3. Aktifkan / enable flow DB_initialisation\n   \n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. **📌 [Edit] Link di Nodered Live Tiap Plant**\n   Ubah link sesuai dengan link nodered. Copas dari link website\n\n\n## C. Notifikasi WA\n### Tidak Menggunakan Notifikasi WA\n Pastikan node **Chats In** memiliki ikon **segitiga merah** (disabled).\n Jika belum:\n  1. Buka **Sidebar → Information → Global Configuration Nodes**.\n  2. Pilih **WhatsApp Link** → buka **waWebClient** → **Delete**.\n  3. Klik **Deploy**.\n\n### Menggunakan Notifikasi WA\n#### 1. Konfigurasi Awal\n Pada node **Inject**, centang **Inject once** lalu sesuaikan **JSON Kamus Sensor** dengan kondisi plant.\n Tambahkan **nomor WA IoT** ke grup WhatsApp tujuan.\n#### 2. Konfigurasi WhatsApp\n - Node 'WA Admin'\n 1. Tambahkan **WhatsApp Link** baru.\n 2. Pilih **WhatsApp Web** → **Add**.\n 3. Pilih **Client = waWebClient**.\n 4. **Enable** node **WA Admin**.\n - Node 'Chats In'\n 1. Pilih **Client = waWebClient**.\n 2. **Done** → **Enable** node.\n - Node 'Group Message\n 1. Pilih **Client = waWebClient**.\n 2. **Done** → **Deploy**.\n#### 3. Pairing & Group ID\n 1. Scan **QR Code** menggunakan WA IoT.\n 2. Beri nama perangkat: **`nodered-<plant>`**.\n 3. Buka panel **Debug**.\n 4. Kirim pesan ke grup menggunakan **nomor selain WA IoT**.\n 5. Salin **chatID** dari **Debug 5**.\n 6. Tempelkan **chatID** pada field **Group ID** di node **Group Message**.\n 7. **Deploy** kembali.\n#### 4. Verifikasi\n 1. Jika berhasil, **Debug 6** menampilkan pesan **`connected`**.\n 2. Uji pengiriman dengan menekan tombol pada **Inject Per Jam**.\n\n### Troubleshooting (Status: Connecting)\n 1. Hapus konfigurasi **waWebClient** melalui:\n   **Information → Global Configuration Nodes → WhatsApp Link → waWebClient → Delete**.\n 2. Pada HP WA IoT, hapus **Linked Device** bernama **`nodered`**.\n 3. Lakukan proses **pairing** (scan QR) kembali.\n\n**Selain diatas, tidak perlu diubah, kecuali tahap development**",
-        "x": 550,
-        "y": 80,
-        "wires": []
-    },
-    {
-        "id": "1b9e778e32fb2612",
-        "type": "comment",
-        "z": "a850bca680aa7206",
-        "name": "Kirim Whatsapp Data Suhu Per Jam",
-        "info": "",
-        "x": 200,
-        "y": 660,
+        "info": "Jika sudah berhasil clone, \n\n## A. Flow DB_initialisation\nFungsi : membuat tabel secara otomatis. Untuk plant yang belum ada database nya. \n    Jika database plant sudah tersedia, lanjut ke Bagian B.\n 1. Buat database dari mysql\n   - Nama : `iot_<singkatan-plant>`\n 2. **database_init** = klik icon pensil untuk penyesuaian konfigurasi database. \n    - Host : IP database\n    - User : username (pastikan pada phpmyadmin, user tersebut menggunakan hostname %)\n    - Password : sesuaikan\n    - Database : dibuat per plant. Contoh : iot_slt\n 3. Aktifkan / enable flow DB_initialisation\n   \n   \n## B. Flow IoT \n 1. **MQTT** = sesuaikan dengan kode plant.\n    - Server : Klik icon pensil. Sesuaikan server dan port   \n    - Topik : \n         Format : `data/<kode-plant>/#`\n         Contoh : `data/01/#`\n 2. **Database** = pastikan sama dengan node `database_init`\n      dari flow `DB_initialisation`\n    Note : Terdapat 3 node database yang saling terhubung. Perubahan pada salah \n    satu node akan otomatis diterapkan pada node lainnya.\n 3. **API sensor_realtime** = Sesuaikan kode plant. \n   Format : `/api/sensor_realtime/latest-<kode-plant>/:sensor?`\n   Format : `/api/sensor_realtime/latest-01/:sensor?`\n 4. **📌 [Edit] Link di Nodered Live Tiap Plant**\n   Ubah link sesuai dengan link nodered. Copas dari link website\n",
+        "x": 590,
+        "y": 180,
         "wires": []
     },
     {
@@ -968,8 +677,8 @@
         "z": "a850bca680aa7206",
         "name": "Get Data AVG Local from API",
         "info": "",
-        "x": 180,
-        "y": 1240,
+        "x": 220,
+        "y": 1040,
         "wires": []
     },
     {
@@ -982,8 +691,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 440,
-        "y": 1240,
+        "x": 480,
+        "y": 1040,
         "wires": [
             [
                 "778f2b06990e6eea",
@@ -1003,8 +712,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 920,
-        "y": 1240,
+        "x": 960,
+        "y": 1040,
         "wires": [
             [
                 "c9d53889c86aa09b",
@@ -1024,8 +733,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 680,
-        "y": 1240,
+        "x": 720,
+        "y": 1040,
         "wires": [
             [
                 "102698730497cfb2"
@@ -1045,50 +754,9 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 640,
-        "y": 1300,
-        "wires": []
-    },
-    {
-        "id": "88e4eb0267a4ae86",
-        "type": "comment",
-        "z": "a850bca680aa7206",
-        "name": "Config Whatsapp",
-        "info": "",
-        "x": 140,
+        "x": 680,
         "y": 1100,
         "wires": []
-    },
-    {
-        "id": "e3baa926886e52cb",
-        "type": "group-out",
-        "z": "a850bca680aa7206",
-        "name": "Group Message",
-        "whatsappLink": "",
-        "gID": "",
-        "x": 1740,
-        "y": 400,
-        "wires": []
-    },
-    {
-        "id": "66dd32705a9b142b",
-        "type": "function",
-        "z": "a850bca680aa7206",
-        "name": "Template Report Hourly",
-        "func": "if (msg.isTimerReport !== true || !Array.isArray(msg.payload)) {\n    return null;\n}\n\n// 1. Ambil Metadata dari Global\nlet metadata = flow.get(\"sensor_metadata\");\nif (!metadata || !metadata.sensors || Object.keys(metadata.sensors).length === 0) {\n    node.error(\"Metadata atau list sensors kosong saat merender laporan\", msg);\n    return null;\n}\n\nconst rows = msg.payload;\nconst waktuWIB = new Date().toLocaleString('id-ID', {\n    timeZone: 'Asia/Jakarta',\n    hour: '2-digit', minute: '2-digit', hour12: false\n});\n\n// 2. Ambil nama Plant langsung dari properti tingkat atas\nconst namaPlant = metadata.plant || \"UNDEFINED\";\n\n// 3. Susun Header Laporan secara Dinamis\nlet report = `📊 *REKAPITULASI SUHU: PLANT ${namaPlant.toUpperCase()}* 📊\\n`;\nreport += \"--------------------------\\n\\n\";\n\n// 4. Loop Data berdasarkan konfigurasi metadata.sensors\nObject.keys(metadata.sensors).forEach((code) => {\n    const info = metadata.sensors[code];\n    const rowData = rows.find(r => r.sensor_code === code);\n    let teksSuhu = \"_Tidak ada data_\";\n\n    if (rowData) {\n        const nilaiSuhu = parseFloat(rowData.value || 0);\n\n        if (nilaiSuhu < 850) {\n            teksSuhu = `*${nilaiSuhu.toFixed(1).replace('.', ',')} °C*`;\n        } else {\n            teksSuhu = \"_Sensor Off (850)_\";\n        }\n    }\n\n    // Format pengiriman pesan ke WA\n    report += `*${info.name} (${code})*\\n`;\n    report += `Suhu : ${teksSuhu}\\n\\n`;\n});\n\nreport += \"--------------------------\\n\";\nreport += `⏰ _Update Otomatis: ${waktuWIB} WIB_`;\n\n// 5. Masukkan teks laporan ke payload utama\nmsg.payload = report;\n\nnode.status({ fill: \"green\", shape: \"dot\", text: \"Template Siap: \" + waktuWIB });\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1510,
-        "y": 400,
-        "wires": [
-            [
-                "e3baa926886e52cb"
-            ]
-        ]
     },
     {
         "id": "94997fcb3ce6b801",
@@ -1097,8 +765,8 @@
         "name": "HTTP RESPONSE",
         "statusCode": "",
         "headers": {},
-        "x": 1370,
-        "y": 1240,
+        "x": 1410,
+        "y": 1040,
         "wires": []
     },
     {
@@ -1114,8 +782,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1340,
-        "y": 1300,
+        "x": 1380,
+        "y": 1100,
         "wires": []
     },
     {
@@ -1131,8 +799,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1130,
-        "y": 1300,
+        "x": 1170,
+        "y": 1100,
         "wires": []
     },
     {
@@ -1141,8 +809,8 @@
         "z": "a850bca680aa7206",
         "mydb": "760765ff61568fbe",
         "name": "database",
-        "x": 1140,
-        "y": 1240,
+        "x": 1180,
+        "y": 1040,
         "wires": [
             [
                 "94997fcb3ce6b801",
@@ -1161,8 +829,8 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 310,
-        "y": 160,
+        "x": 350,
+        "y": 260,
         "wires": [
             [
                 "2d2d433b8c5f14a2"
@@ -1185,8 +853,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1250,
-        "y": 160,
+        "x": 1290,
+        "y": 260,
         "wires": [
             [
                 "e96ce2366fa7a01a"
@@ -1209,8 +877,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 1640,
-        "y": 160,
+        "x": 1680,
+        "y": 260,
         "wires": [
             []
         ]
@@ -1227,8 +895,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
-        "y": 160,
+        "x": 890,
+        "y": 260,
         "wires": [
             [
                 "5bdd3d1c05c7c59d"
@@ -1247,8 +915,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1440,
-        "y": 160,
+        "x": 1480,
+        "y": 260,
         "wires": [
             [
                 "844df4ad09c5457e"
@@ -1261,8 +929,8 @@
         "z": "a850bca680aa7206",
         "name": "Versioning",
         "info": "list versioning cek di IoT Hub (Directus)",
-        "x": 120,
-        "y": 160,
+        "x": 160,
+        "y": 260,
         "wires": []
     },
     {
@@ -1277,8 +945,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
-        "y": 160,
+        "x": 580,
+        "y": 260,
         "wires": [
             [
                 "6175a68dd43fdd54"
@@ -1297,8 +965,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
-        "y": 160,
+        "x": 1110,
+        "y": 260,
         "wires": [
             [
                 "e2e920927c938a62"
