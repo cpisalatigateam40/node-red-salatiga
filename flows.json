@@ -3,6 +3,14 @@
         "id": "a850bca680aa7206",
         "type": "tab",
         "label": "Flow IoT",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6e80b4feb5e1d092",
+        "type": "tab",
+        "label": "CCP - Elec Baking",
         "disabled": true,
         "info": "",
         "env": []
@@ -58,7 +66,89 @@
         "name": "",
         "host": "127.0.0.1",
         "port": "3306",
+        "db": "iot_bdg",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "7eb6ea8639746bc1",
+        "type": "mqtt-broker",
+        "name": "Bandung Dev",
+        "broker": "10.26.9.34",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "f4c6d4547de07a7f",
+        "type": "MySQLdatabase",
+        "name": "data iot",
+        "host": "10.71.3.27",
+        "port": "3306",
         "db": "iot_slt",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "265ec8bf893c99b9",
+        "type": "mqtt-broker",
+        "name": "MQTT Salatiga",
+        "broker": "10.71.3.27",
+        "port": "1884",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "dec916b40ded4a6c",
+        "type": "MySQLdatabase",
+        "name": "db_final ",
+        "host": "10.26.9.34",
+        "port": "3306",
+        "db": "iot_slt_test",
         "tz": "",
         "charset": "UTF8"
     },
@@ -91,7 +181,7 @@
         "finalize": "",
         "libs": [],
         "x": 980,
-        "y": 520,
+        "y": 500,
         "wires": [
             [
                 "48639c479673093b"
@@ -110,8 +200,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 850,
-        "y": 580,
+        "x": 1650,
+        "y": 1000,
         "wires": [
             [
                 "48639c479673093b"
@@ -135,12 +225,13 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 500,
-        "y": 600,
+        "x": 1300,
+        "y": 1080,
         "wires": [
             [
                 "1b5206eea885dcbd",
-                "5a3d6822d8636757"
+                "5a3d6822d8636757",
+                "ce0af62e459e5ac3"
             ]
         ]
     },
@@ -170,8 +261,8 @@
         "z": "a850bca680aa7206",
         "name": "Daily Cleanup Data > 14 Hari",
         "info": " - Inject node jalan setiap hari pukul 00:10.\n - Jalankan query DELETE untuk menghapus data realtime lebih dari 14 hari.\n - Tujuan: mencegah tabel sensor_realtime membengkak.",
-        "x": 220,
-        "y": 600,
+        "x": 1020,
+        "y": 1080,
         "wires": []
     },
     {
@@ -180,21 +271,9 @@
         "z": "a850bca680aa7206",
         "name": "Alert",
         "info": "",
-        "x": 150,
-        "y": 700,
+        "x": 950,
+        "y": 1160,
         "wires": []
-    },
-    {
-        "id": "48639c479673093b",
-        "type": "mysql",
-        "z": "a850bca680aa7206",
-        "mydb": "760765ff61568fbe",
-        "name": "database",
-        "x": 1340,
-        "y": 520,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "3e42471de8ff3207",
@@ -209,7 +288,7 @@
         "finalize": "",
         "libs": [],
         "x": 980,
-        "y": 460,
+        "y": 440,
         "wires": [
             [
                 "48639c479673093b"
@@ -228,8 +307,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 870,
-        "y": 700,
+        "x": 1630,
+        "y": 1180,
         "wires": [
             [
                 "48639c479673093b"
@@ -255,8 +334,8 @@
         "onceDelay": "2",
         "topic": "",
         "payloadType": "date",
-        "x": 530,
-        "y": 700,
+        "x": 1330,
+        "y": 1160,
         "wires": [
             [
                 "197658740bcf179c"
@@ -275,8 +354,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
-        "y": 620,
+        "x": 1640,
+        "y": 1100,
         "wires": [
             [
                 "48639c479673093b"
@@ -289,8 +368,8 @@
         "z": "a850bca680aa7206",
         "name": "REST API → Latest Sensor Data",
         "info": " - Endpoint HTTP /api/sensor_realtime/latest.\n - Ambil nilai terbaru dari setiap sensor.\n - Format output JSON agar bisa dipakai website paperless / frontend lain.",
-        "x": 230,
-        "y": 780,
+        "x": 1030,
+        "y": 1240,
         "wires": []
     },
     {
@@ -299,8 +378,8 @@
         "z": "a850bca680aa7206",
         "name": "(-) Trigger button simpan dr paperless untuk insert ke tabel history",
         "info": "",
-        "x": 330,
-        "y": 960,
+        "x": 1130,
+        "y": 1420,
         "wires": []
     },
     {
@@ -310,8 +389,8 @@
         "name": "",
         "server": "fae6fc6b5acf089c",
         "client": "",
-        "x": 1170,
-        "y": 880,
+        "x": 1970,
+        "y": 1340,
         "wires": []
     },
     {
@@ -326,8 +405,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 900,
-        "y": 880,
+        "x": 1700,
+        "y": 1340,
         "wires": [
             [
                 "ccad7752d95aa5d9"
@@ -342,8 +421,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 690,
-        "y": 880,
+        "x": 1490,
+        "y": 1340,
         "wires": [
             [
                 "d2f15c42ebee4a71"
@@ -360,8 +439,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 730,
-        "y": 960,
+        "x": 1530,
+        "y": 1420,
         "wires": [
             [
                 "c02b0ea0c4583efd"
@@ -376,8 +455,8 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 970,
-        "y": 960,
+        "x": 1770,
+        "y": 1420,
         "wires": [
             [
                 "b291ee43fbaafd45"
@@ -396,8 +475,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1250,
-        "y": 960,
+        "x": 2050,
+        "y": 1420,
         "wires": [
             [
                 "605ea1f6543efe0a"
@@ -416,8 +495,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1720,
-        "y": 960,
+        "x": 2520,
+        "y": 1420,
         "wires": [
             []
         ]
@@ -428,8 +507,8 @@
         "z": "a850bca680aa7206",
         "name": "Websocket → Latest Sensor Data",
         "info": "",
-        "x": 240,
-        "y": 880,
+        "x": 1040,
+        "y": 1340,
         "wires": []
     },
     {
@@ -439,8 +518,8 @@
         "name": "HTTP Response",
         "statusCode": "",
         "headers": {},
-        "x": 1420,
-        "y": 780,
+        "x": 2220,
+        "y": 1240,
         "wires": []
     },
     {
@@ -455,8 +534,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1150,
-        "y": 780,
+        "x": 1950,
+        "y": 1240,
         "wires": [
             [
                 "824f1f8b95116cd3"
@@ -473,8 +552,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 510,
-        "y": 780,
+        "x": 1310,
+        "y": 1240,
         "wires": [
             [
                 "88fbb53b1ce021e7"
@@ -493,39 +572,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 730,
-        "y": 780,
+        "x": 1530,
+        "y": 1240,
         "wires": [
             [
                 "a1042de7bf32f7c3"
-            ]
-        ]
-    },
-    {
-        "id": "a1042de7bf32f7c3",
-        "type": "mysql",
-        "z": "a850bca680aa7206",
-        "mydb": "760765ff61568fbe",
-        "name": "database",
-        "x": 940,
-        "y": 780,
-        "wires": [
-            [
-                "b9b718c0bb38497d"
-            ]
-        ]
-    },
-    {
-        "id": "605ea1f6543efe0a",
-        "type": "mysql",
-        "z": "a850bca680aa7206",
-        "mydb": "760765ff61568fbe",
-        "name": "database",
-        "x": 1520,
-        "y": 960,
-        "wires": [
-            [
-                "93ea4af6d0509d68"
             ]
         ]
     },
@@ -540,29 +591,11 @@
         "wires": []
     },
     {
-        "id": "72190acd9154e130",
-        "type": "mqtt out",
-        "z": "a850bca680aa7206",
-        "name": "MQTT Nasional",
-        "topic": "",
-        "qos": "1",
-        "retain": "true",
-        "respTopic": "",
-        "contentType": "",
-        "userProps": "",
-        "correl": "",
-        "expiry": "",
-        "broker": "95030b5bf43fa98e",
-        "x": 1160,
-        "y": 340,
-        "wires": []
-    },
-    {
         "id": "489079518de56347",
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "MQTT Topic",
-        "func": "let plant_code = msg.plant_code;\nlet sensor_code = msg.sensor_code;\n\nmsg.topic = `iot/${plant_code}/${sensor_code}`;\n\nmsg.payload = {\n    sensor_code: msg.sensor_code,\n    value: msg.value,\n    cycleValue: msg.cycleValue,\n    timestamp: msg.timestamp\n};\n\nreturn msg;",
+        "func": "let plant_code = msg.plant_code;\nlet sensor_code = msg.sensor_code;\n\nmsg.topic = `ccp/${plant_code}/${sensor_code}`;\n\nmsg.payload = {\n    sensor_code: msg.sensor_code,\n    value: msg.value,\n    cycleValue: msg.cycleValue,\n    timestamp: msg.timestamp\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -570,10 +603,10 @@
         "finalize": "",
         "libs": [],
         "x": 930,
-        "y": 340,
+        "y": 320,
         "wires": [
             [
-                "72190acd9154e130"
+                "6afceffe057ff705"
             ]
         ]
     },
@@ -581,22 +614,23 @@
         "id": "4599b399b3698075",
         "type": "function",
         "z": "a850bca680aa7206",
-        "name": "Parse",
-        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName.substring(0, 6) || \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet interval = payload.interval;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.interval = interval;\nmsg.timestamp = timestamp;\n\nflow.set('plant_code',plant_code);\n\nreturn msg;",
+        "name": "Parse1",
+        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName ? payload._groupName.substring(0, 6) : \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet interval = payload.interval;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n// ======================================================\n// FILTER VALUE / CYCLE VALUE (DROP IF 850)\n// ======================================================\nif (valueConverted === 850 || Number(cycleValue) === 850) {\n    return null;\n}\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.interval = interval;\nmsg.timestamp = timestamp;\n\n// ======================================================\n// FLOW CONTEXT & LINKING TO PARSE 2\n// ======================================================\nflow.set('plant_code', plant_code);\n\n// 1. Simpan daftar kode sensor aktif ke memory flow\nlet registeredSensors = flow.get('registeredSensors') || [];\nif (!registeredSensors.includes(sensor_code)) {\n    registeredSensors.push(sensor_code);\n    flow.set('registeredSensors', registeredSensors);\n}\n\n// 2. Simpan objek data Parse 1 agar siap di-pass-through oleh Parse 2\nmsg.parse1Data = {\n    plant_code: plant_code,\n    sensor_code: sensor_code,\n    plc_code: plc_code,\n    value: valueConverted,\n    cycleValue: cycleValue,\n    interval: interval,\n    timestamp: timestamp,\n    topic: msg.topic\n};\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 690,
+        "x": 700,
         "y": 440,
         "wires": [
             [
                 "489079518de56347",
                 "3e42471de8ff3207",
                 "9d396dfba006640c",
-                "5282bba4d8e7d9d0"
+                "5282bba4d8e7d9d0",
+                "179f122c0665d0d7"
             ]
         ]
     },
@@ -613,7 +647,7 @@
         "finalize": "",
         "libs": [],
         "x": 930,
-        "y": 400,
+        "y": 380,
         "wires": [
             [
                 "71a6110c68366f79"
@@ -632,8 +666,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1140,
-        "y": 400,
+        "x": 1120,
+        "y": 380,
         "wires": [
             [
                 "48639c479673093b"
@@ -648,7 +682,7 @@
         "topic": "data/SLT/#",
         "qos": "2",
         "datatype": "auto",
-        "broker": "",
+        "broker": "265ec8bf893c99b9",
         "nl": false,
         "rap": true,
         "rh": 0,
@@ -677,8 +711,8 @@
         "z": "a850bca680aa7206",
         "name": "Get Data AVG Local from API",
         "info": "",
-        "x": 220,
-        "y": 1040,
+        "x": 1020,
+        "y": 1500,
         "wires": []
     },
     {
@@ -691,8 +725,8 @@
         "upload": false,
         "skipBodyParsing": false,
         "swaggerDoc": "",
-        "x": 480,
-        "y": 1040,
+        "x": 1280,
+        "y": 1500,
         "wires": [
             [
                 "778f2b06990e6eea",
@@ -712,8 +746,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 960,
-        "y": 1040,
+        "x": 1760,
+        "y": 1500,
         "wires": [
             [
                 "c9d53889c86aa09b",
@@ -733,8 +767,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 720,
-        "y": 1040,
+        "x": 1520,
+        "y": 1500,
         "wires": [
             [
                 "102698730497cfb2"
@@ -754,8 +788,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 680,
-        "y": 1100,
+        "x": 1480,
+        "y": 1560,
         "wires": []
     },
     {
@@ -765,8 +799,8 @@
         "name": "HTTP RESPONSE",
         "statusCode": "",
         "headers": {},
-        "x": 1410,
-        "y": 1040,
+        "x": 2210,
+        "y": 1500,
         "wires": []
     },
     {
@@ -782,8 +816,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1380,
-        "y": 1100,
+        "x": 2180,
+        "y": 1560,
         "wires": []
     },
     {
@@ -799,24 +833,9 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1170,
-        "y": 1100,
+        "x": 1970,
+        "y": 1560,
         "wires": []
-    },
-    {
-        "id": "f9214818e453264b",
-        "type": "mysql",
-        "z": "a850bca680aa7206",
-        "mydb": "760765ff61568fbe",
-        "name": "database",
-        "x": 1180,
-        "y": 1040,
-        "wires": [
-            [
-                "94997fcb3ce6b801",
-                "351c7ffe01bd5b7b"
-            ]
-        ]
     },
     {
         "id": "26f1938210510e40",
@@ -938,7 +957,7 @@
         "type": "function",
         "z": "a850bca680aa7206",
         "name": "📌 [Edit] Link di Nodered Live Tiap Plant",
-        "func": "/**********************************************************************\n * NODE-RED LINK\n *\n * HANYA DIUBAH PADA SERVER PRODUCTION.\n *\n * Isi sesuai URL Node-RED lokal.\n *\n * Development tidak perlu mengubah node ini.\n **********************************************************************/\n\nconst LINK = \"http://10.68.1.141:1880/\";\n\nmsg.link = LINK;\n\nreturn msg;",
+        "func": "/**********************************************************************\n * NODE-RED LINK\n *\n * HANYA DIUBAH PADA SERVER PRODUCTION.\n *\n * Isi sesuai URL Node-RED lokal.\n *\n * Development tidak perlu mengubah node ini.\n **********************************************************************/\n\nconst LINK = \"http://10.26.9.34:1880/\";\n\nmsg.link = LINK;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -972,6 +991,878 @@
                 "e2e920927c938a62"
             ]
         ]
+    },
+    {
+        "id": "48639c479673093b",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "dec916b40ded4a6c",
+        "name": "database",
+        "x": 2380,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a1042de7bf32f7c3",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "f4c6d4547de07a7f",
+        "name": "database",
+        "x": 1740,
+        "y": 1240,
+        "wires": [
+            [
+                "b9b718c0bb38497d"
+            ]
+        ]
+    },
+    {
+        "id": "605ea1f6543efe0a",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "f4c6d4547de07a7f",
+        "name": "database",
+        "x": 2320,
+        "y": 1420,
+        "wires": [
+            [
+                "93ea4af6d0509d68"
+            ]
+        ]
+    },
+    {
+        "id": "f9214818e453264b",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "f4c6d4547de07a7f",
+        "name": "database",
+        "x": 1980,
+        "y": 1500,
+        "wires": [
+            [
+                "94997fcb3ce6b801",
+                "351c7ffe01bd5b7b"
+            ]
+        ]
+    },
+    {
+        "id": "e921c0d5d8ed7d02",
+        "type": "http in",
+        "z": "a850bca680aa7206",
+        "name": "API Get Data Abg Local",
+        "url": "/iot/local/ccp",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 1280,
+        "y": 1640,
+        "wires": [
+            [
+                "4daf4b18cf17f136",
+                "4337ee14df3b1b0a"
+            ]
+        ]
+    },
+    {
+        "id": "6f7002952dd99b8e",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Get plant / sensor Avg",
+        "func": "let periode = msg.req.query.periode;\n\nlet where = \"\";\n\nif (periode) {\n    where = `WHERE DATE_FORMAT(timestamp, '%m-%Y') = '${periode}'`;\n}\n\nmsg.topic = `\nSELECT\n    DATE_FORMAT(timestamp, '%m-%Y') AS periode,\n    sensor_code,\n    AVG(value) AS avg_per_sensor\nFROM sensor_history\n${where}\nGROUP BY\n    DATE_FORMAT(timestamp, '%m-%Y'),\n    sensor_code\nORDER BY\n    periode,\n    sensor_code\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1760,
+        "y": 1640,
+        "wires": [
+            [
+                "04bcff3204c985ff",
+                "1e8633c078756baf"
+            ]
+        ]
+    },
+    {
+        "id": "4daf4b18cf17f136",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Auth Nasional ke Lokal",
+        "func": "let auth = msg.req.headers.authorization;\n\n\n    let credential = Buffer.from(\n        auth.split(\" \")[1],\n        \"base64\"\n    ).toString();\n\n    let [username, password] = credential.split(\":\");\n\n    msg.username = username;\n    msg.password = password;\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1520,
+        "y": 1640,
+        "wires": [
+            [
+                "6f7002952dd99b8e"
+            ]
+        ]
+    },
+    {
+        "id": "4337ee14df3b1b0a",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug in",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "req.headers",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1480,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "053e229d2617be7e",
+        "type": "http response",
+        "z": "a850bca680aa7206",
+        "name": "HTTP RESPONSE",
+        "statusCode": "",
+        "headers": {},
+        "x": 2210,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "1a805d88a4324309",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug DB",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2180,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "04bcff3204c985ff",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug SQL",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1970,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "1e8633c078756baf",
+        "type": "mysql",
+        "z": "a850bca680aa7206",
+        "mydb": "f4c6d4547de07a7f",
+        "name": "database",
+        "x": 1980,
+        "y": 1640,
+        "wires": [
+            [
+                "053e229d2617be7e",
+                "1a805d88a4324309"
+            ]
+        ]
+    },
+    {
+        "id": "7e0a520e66f9fae7",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Get Data CCP Local from API",
+        "info": "",
+        "x": 1020,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "179f122c0665d0d7",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Link IoT Hub",
+        "func": "// 1. Ambil kode sensor dari msg.sensor_code (hasil dari Parse 1)\nlet sensorCode = msg.sensor_code || msg.link || \"\";\n\n// 2. Buat URL Directus API dengan filter yang benar:\n//    - filter[kode_sensor][_eq] = kode sensor (misal BC0104)\n//    - filter[jenis_mesin_ccp][_nnull] = true (artinya jenis_mesin_ccp TIDAK NULL / TERISI)\nlet baseUrl = \"http://10.68.1.220:8055/items/sensor\";\nlet filterSensor = \"filter[kode_sensor][_eq]=\" + encodeURIComponent(sensorCode);\nlet filterCCPNotNull = \"filter[jenis_mesin_ccp][_nnull]=true\";\nlet selectFields = \"fields=*,proses.Kode\";\n\n// Gabungkan URL\nmsg.url = `${baseUrl}?${filterSensor}&${filterCCPNotNull}&${selectFields}`;\n\n// 3. Set Header Request\nmsg.headers = {\n    \"Authorization\": \"Bearer AZ1ByHZWlFh8GjKRGngMX-If12RnXAFP\",\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 620,
+        "wires": [
+            [
+                "46b54a9806aea0f4"
+            ]
+        ]
+    },
+    {
+        "id": "46b54a9806aea0f4",
+        "type": "http request",
+        "z": "a850bca680aa7206",
+        "name": "Get IoT Hub",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 1150,
+        "y": 620,
+        "wires": [
+            [
+                "b1371072ddf1cc67"
+            ]
+        ]
+    },
+    {
+        "id": "b1371072ddf1cc67",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Parse2",
+        "func": "// 1. Ambil data asli yang diparse dari Parse 1\nlet originalParse1Data = msg.parse1Data || {};\n\n// 2. Ambil data respon dari Directus/IoT Hub (Directus membungkus data di msg.payload.data)\nlet rawPayload = msg.payload;\nlet items = [];\n\nif (rawPayload && Array.isArray(rawPayload.data)) {\n    items = rawPayload.data;\n} else if (Array.isArray(rawPayload)) {\n    items = rawPayload;\n} else if (rawPayload && typeof rawPayload.data === 'object' && rawPayload.data !== null) {\n    items = [rawPayload.data];\n}\n\n// 3. Filter data sensor dari Directus yang jenis_mesin_ccp nya TERISI\nlet validCcpSensors = items.filter(sensor => {\n    if (!sensor) return false;\n\n    // Cek ketersediaan field CCP (jenis_mesin_ccp)\n    let ccpVal = sensor.jenis_mesin_ccp !== undefined ? sensor.jenis_mesin_ccp : sensor.jenis_mesin_Ccp;\n    \n    let hasCCP = ccpVal !== null && \n                 ccpVal !== undefined && \n                 String(ccpVal).trim() !== \"\" && \n                 String(ccpVal).toLowerCase() !== \"null\";\n\n    return hasCCP;\n});\n\n// ====================================================================\n// 4. PEMERIKSAAN HASIL:\n// Jika sensor TIDAK memiliki CCP, kembalikan null (HENTIKAN ALUR FLOW)\n// ====================================================================\nif (validCcpSensors.length === 0) {\n    return null; // Stop alur, data Parse 1 dibuang\n}\n\n// ====================================================================\n// 5. JIKA SENSOR MEMILIKI CCP:\n// Kembalikan HASIL DARIPARSE 1 sebagai payload utama\n// ====================================================================\n// Tempelkan info CCP dari Directus ke data Parse 1 (Opsional, jika dibutuhkan)\noriginalParse1Data.ccp_info = validCcpSensors[0];\n\n// Set msg utama kembali dengan data Parse 1\nmsg.plant_code = originalParse1Data.plant_code;\nmsg.sensor_code = originalParse1Data.sensor_code;\nmsg.plc_code = originalParse1Data.plc_code;\nmsg.value = originalParse1Data.value;\nmsg.cycleValue = originalParse1Data.cycleValue;\nmsg.interval = originalParse1Data.interval;\nmsg.timestamp = originalParse1Data.timestamp;\n\n// Masukkan data Parse 1 sebagai msg.payload\nmsg.payload = originalParse1Data;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1360,
+        "y": 620,
+        "wires": [
+            [
+                "e9f6f6e2d90480a8",
+                "dd982eac8b9e9451",
+                "ca4552f53062b00c"
+            ]
+        ]
+    },
+    {
+        "id": "e9f6f6e2d90480a8",
+        "type": "debug",
+        "z": "a850bca680aa7206",
+        "name": "debug output",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1570,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "dd982eac8b9e9451",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Insert to sensor_machine",
+        "func": "// 1. Ambil payload utama\nlet data = msg.payload || {};\nlet ccpInfo = data.ccp_info || {};\n\n// Fungsi pembantu untuk mengubah format ISO (2026-07-03T03:00:22.000Z) ke format SQL (YYYY-MM-DD HH:mm:ss)\nfunction formatToSQLDate(isoString) {\n    if (!isoString) return null;\n    let d = new Date(isoString);\n    if (isNaN(d.getTime())) return isoString; // Jika bukan format date valid, kembalikan string aslinya\n    return d.toISOString().slice(0, 19).replace('T', ' ');\n}\n\n// 2. Mapping data sesuai nama kolom database\nlet project_code = null;\nif (ccpInfo.proses && ccpInfo.proses.Kode) {\n    project_code = ccpInfo.proses.Kode;\n} else if (data.project_code) {\n    project_code = data.project_code;\n}\n\nlet sensor_code = data.sensor_code || data.kode_sensor || null;\n\n// Mengambil timestamp dari date_created dan diubah ke format SQL\nlet rawDateCreated = data.date_created || ccpInfo.date_created || null;\nlet timestamp = formatToSQLDate(rawDateCreated);\n\nlet cycle = data.cycleValue ?? null;\nlet value = data.value ?? null;\n\n// Format waktu insert saat ini (YYYY-MM-DD HH:mm:ss)\nlet insert_at = new Date().toISOString().slice(0, 19).replace('T', ' ');\n\n// 3. Query SQL INSERT INTO\nmsg.topic = `\n    INSERT INTO sensor_machine\n    (project_code, sensor_code, timestamp, insert_at, cycle, value) \n    VALUES \n    (?, ?, ?, ?, ?, ?)\n`;\n\n// 4. Parameter query\nmsg.payload = [\n    project_code,\n    sensor_code,\n    timestamp,\n    insert_at,\n    cycle,\n    value\n];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 640,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "9cd1b2d3fe78927d",
+        "type": "comment",
+        "z": "a850bca680aa7206",
+        "name": "Interval → Tabel Sensor Machine",
+        "info": " - Inject node jalan setiap interval.\n - Eksekusi query agregasi (AVG per sensor) ke sensor_machine.\n - Tujuan: menyimpan data sensor ccp dan dihapus dalam 2 pekan",
+        "x": 230,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "ca4552f53062b00c",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "MQTT Topic",
+        "func": "let plant_code = msg.plant_code;\nlet sensor_code = msg.sensor_code;\n\nmsg.topic = `ccp/${plant_code}/${sensor_code}`;\n\nmsg.payload = {\n    sensor_code: msg.sensor_code,\n    value: msg.value,\n    cycleValue: msg.cycleValue,\n    timestamp: msg.timestamp\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1550,
+        "y": 740,
+        "wires": [
+            [
+                "79c8fe9eec7b4c16"
+            ]
+        ]
+    },
+    {
+        "id": "79c8fe9eec7b4c16",
+        "type": "mqtt out",
+        "z": "a850bca680aa7206",
+        "name": "mqtt nasional",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "95030b5bf43fa98e",
+        "x": 1750,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "6afceffe057ff705",
+        "type": "mqtt out",
+        "z": "a850bca680aa7206",
+        "name": "mqtt nasional",
+        "topic": "",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "95030b5bf43fa98e",
+        "x": 1130,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ce0af62e459e5ac3",
+        "type": "function",
+        "z": "a850bca680aa7206",
+        "name": "Auto delete sensor_machine > 7 bulan",
+        "func": "msg.topic = \"DELETE FROM sensor_machine WHERE timestamp < NOW() - INTERVAL 7 MONTH\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1650,
+        "y": 900,
+        "wires": [
+            [
+                "48639c479673093b"
+            ]
+        ]
+    },
+    {
+        "id": "e858fa8cf135367e",
+        "type": "json",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "e287dfbcc790da79"
+            ]
+        ]
+    },
+    {
+        "id": "5cfa6daa8f626ce8",
+        "type": "mqtt in",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "MQTT",
+        "topic": "data/SLT/#",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "265ec8bf893c99b9",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 180,
+        "wires": [
+            [
+                "e858fa8cf135367e"
+            ]
+        ]
+    },
+    {
+        "id": "e287dfbcc790da79",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "Parse1",
+        "func": "// ======================================================\n// VALIDATE TOPIC\n// ======================================================\nif (typeof msg.topic !== \"string\") {\n    return null;\n}\n\n// ======================================================\n// PARSE TOPIC\n// ======================================================\nlet parts = msg.topic.split(\"/\");\nif (parts.length < 4) {\n    return null;\n}\nlet plant_code = parts[1];\nlet plc_code = parts[3];\n\n// ======================================================\n// VALIDATE PAYLOAD\n// ======================================================\nlet payload = msg.payload || {};\nlet sensor_code = (payload._groupName ? payload._groupName.substring(0, 6) : \"\").toString().trim();\nlet timestamp = payload._terminalTime;\nlet rawValue = payload.data;\nlet interval = payload.interval;\nlet cycleValue = payload.data_cycle ?? null;\n\nif (\n    !plant_code ||\n    !sensor_code ||\n    !plc_code ||\n    !timestamp\n) {\n    return null;\n}\n\n// ======================================================\n// VALUE CONVERSION\n// ======================================================\nlet measurement_code = sensor_code.substring(2, 4);\nlet valueConverted;\nswitch (measurement_code) {\n    case \"01\":\n        valueConverted = parseFloat(rawValue) / 1000;\n        break;\n    case \"02\":\n    case \"03\":\n    case \"04\":\n        valueConverted = parseFloat(rawValue) / 10;\n        break;\n    default:\n        valueConverted = parseFloat(rawValue);\n}\n\n// ======================================================\n// NORMALIZE MESSAGE\n// ======================================================\nmsg.plant_code = plant_code;\nmsg.sensor_code = sensor_code;\nmsg.plc_code = plc_code;\nmsg.value = valueConverted;\nmsg.cycleValue = cycleValue;\nmsg.interval = interval;\nmsg.timestamp = timestamp;\n\n// ======================================================\n// FLOW CONTEXT & LINKING TO PARSE 2\n// ======================================================\nflow.set('plant_code', plant_code);\n\n// 1. Simpan daftar kode sensor aktif ke memory flow\nlet registeredSensors = flow.get('registeredSensors') || [];\nif (!registeredSensors.includes(sensor_code)) {\n    registeredSensors.push(sensor_code);\n    flow.set('registeredSensors', registeredSensors);\n}\n\n// 2. Simpan objek data Parse 1 agar siap di-pass-through oleh Parse 2\nmsg.parse1Data = {\n    plant_code: plant_code,\n    sensor_code: sensor_code,\n    plc_code: plc_code,\n    value: valueConverted,\n    cycleValue: cycleValue,\n    interval: interval,\n    timestamp: timestamp,\n    topic: msg.topic\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 460,
+        "y": 180,
+        "wires": [
+            [
+                "854dff54915bdf6d"
+            ]
+        ]
+    },
+    {
+        "id": "854dff54915bdf6d",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "Link IoT Hub for Elec",
+        "func": "// 1. Ambil kode sensor dari msg.sensor_code (hasil dari Parse 1)\nlet sensorCode = msg.sensor_code || msg.link || \"\";\n\n// 2. Buat URL Directus API dengan filter relasi ke jenis_mesin_ccp:\n//    - filter[kode_sensor][_eq] = kode sensor (misal BC0104)\n//    - filter[jenis_mesin_ccp][id][_eq] = 1 (filter berdasarkan ID dari jenis_mesin_ccp)\nlet baseUrl = \"http://10.68.1.220:8055/items/sensor\";\nlet filterSensor = \"filter[kode_sensor][_eq]=\" + encodeURIComponent(sensorCode);\nlet filterCCPId = \"filter[jenis_mesin_ccp][id][_eq]=1\";\nlet selectFields = \"fields=*,proses.Kode\";\n\n// Gabungkan URL\nmsg.url = `${baseUrl}?${filterSensor}&${filterCCPId}&${selectFields}`;\n\n// 3. Set Header Request\nmsg.headers = {\n    \"Authorization\": \"Bearer AZ1ByHZWlFh8GjKRGngMX-If12RnXAFP\",\n    \"Content-Type\": \"application/json\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 180,
+        "wires": [
+            [
+                "fdb2ee0b904e4ce8"
+            ]
+        ]
+    },
+    {
+        "id": "fdb2ee0b904e4ce8",
+        "type": "http request",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "Get IoT Hub",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 870,
+        "y": 180,
+        "wires": [
+            [
+                "090ddb8254e13bd4"
+            ]
+        ]
+    },
+    {
+        "id": "090ddb8254e13bd4",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "Parse2",
+        "func": "// ====================================================================\n// 1. FILTER & VALIDASI DIRECTUS (CCP GATEKEEPER)\n// ====================================================================\nlet originalParse1Data = msg.parse1Data || {};\nlet rawPayload = msg.payload;\nlet items = [];\n\nif (rawPayload && Array.isArray(rawPayload.data)) {\n    items = rawPayload.data;\n} else if (Array.isArray(rawPayload)) {\n    items = rawPayload;\n} else if (rawPayload && typeof rawPayload.data === 'object' && rawPayload.data !== null) {\n    items = [rawPayload.data];\n}\n\n// Filter sensor CCP dari Directus\nlet validCcpSensors = items.filter(sensor => {\n    if (!sensor) return false;\n    let ccpVal = sensor.jenis_mesin_ccp !== undefined ? sensor.jenis_mesin_ccp : sensor.jenis_mesin_Ccp;\n    return ccpVal !== null && \n           ccpVal !== undefined && \n           String(ccpVal).trim() !== \"\" && \n           String(ccpVal).toLowerCase() !== \"null\";\n});\n\n// Stop flow jika BUKAN sensor CCP\nif (validCcpSensors.length === 0) {\n    return null;\n}\n\n// ====================================================================\n// 2. LOGIKA SHIFT, TANGGAL PRODUKSI & TIMESTAMP CYCLE\n// ====================================================================\nconst now = new Date();\n\n// Adjust Timezone ke UTC+7 (WIB)\nconst localTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));\nconst hour = localTime.getUTCHours();\n\n// Hitung Production Date\nlet productionDate = localTime.toISOString().split('T')[0];\nif (hour < 7) {\n    const prevDay = new Date(localTime);\n    prevDay.setDate(prevDay.getDate() - 1);\n    productionDate = prevDay.toISOString().split('T')[0];\n}\n\n// Hitung Group ID (Shift)\nlet groupId = 3;\nif (hour >= 7 && hour < 15) {\n    groupId = 1;\n} else if (hour >= 15 && hour < 23) {\n    groupId = 2;\n}\n\n// Ambil State dari Flow Context\nconst lastGroup = flow.get('last_group_id');\nconst lastProdDate = flow.get('last_prod_date');\nlet currentCycle = flow.get('current_data_cycle') || 1;\nlet firstTimestamp = flow.get('cycle_first_timestamp');\n\n// Cek Pergantian Shift / Hari Produksi\nif (lastGroup !== groupId || lastProdDate !== productionDate) {\n    currentCycle = 1;\n    firstTimestamp = now; // Reset start timestamp untuk shift baru\n    flow.set('last_group_id', groupId);\n    flow.set('last_prod_date', productionDate);\n} else if (msg.is_new_cycle === true) {\n    currentCycle += 1;\n    firstTimestamp = now; // Reset start timestamp untuk siklus baru\n}\n\nif (!firstTimestamp) {\n    firstTimestamp = now;\n}\n\n// Simpan state ke flow context\nflow.set('current_data_cycle', currentCycle);\nflow.set('cycle_first_timestamp', firstTimestamp);\n\n// ====================================================================\n// 3. FORMATTING JSON OUTPUT & KONVERSI STATUS\n// ====================================================================\nconst formatJam = (dateObj) => {\n    if (!dateObj) return null;\n    const d = new Date(dateObj);\n    if (isNaN(d.getTime())) return null;\n    const hours = String(d.getHours()).padStart(2, '0');\n    const minutes = String(d.getMinutes()).padStart(2, '0');\n    return `${hours}:${minutes}`;\n};\n\n// Konversi Status\nlet statusValue = null;\nif (originalParse1Data.status === 'RELEASE' || originalParse1Data.status === 1) {\n    statusValue = 1;\n} else if (originalParse1Data.status === 'NOT RELEASE' || originalParse1Data.status === 0) {\n    statusValue = 0;\n}\n\n// Susun Output Payload\nmsg.payload = {\n    project_code: 1,\n    sensor_code: originalParse1Data.sensor_code || \"BC0101\",\n    cycle: originalParse1Data.cycle || currentCycle,\n    start: formatJam(firstTimestamp),\n    end: formatJam(now),\n    status: statusValue,\n    data: {\n        total_data: originalParse1Data.total_data || 0,\n        avg_low: originalParse1Data.avg_low || 0,\n        avg_high: originalParse1Data.avg_high || 0,\n        min_low: originalParse1Data.min_low || 0,\n        max_low: originalParse1Data.max_low || 0,\n        min_high: originalParse1Data.min_high || 0,\n        max_high: originalParse1Data.max_high || 0\n    }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 180,
+        "wires": [
+            [
+                "541b23282778471b"
+            ]
+        ]
+    },
+    {
+        "id": "541b23282778471b",
+        "type": "debug",
+        "z": "6e80b4feb5e1d092",
+        "d": true,
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1220,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "fab17128851465d6",
+        "type": "mysql",
+        "z": "6e80b4feb5e1d092",
+        "mydb": "f4c6d4547de07a7f",
+        "name": "read db",
+        "x": 1240,
+        "y": 420,
+        "wires": [
+            [
+                "12d754e4e4b46bfa"
+            ]
+        ]
+    },
+    {
+        "id": "07d9aa1c5ddaf305",
+        "type": "debug",
+        "z": "6e80b4feb5e1d092",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1880,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "dfd49b1e44120a8d",
+        "type": "inject",
+        "z": "6e80b4feb5e1d092",
+        "name": "inject",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 130,
+        "y": 420,
+        "wires": [
+            [
+                "9a9bf40b9ad7603b"
+            ]
+        ]
+    },
+    {
+        "id": "44469acc4ed57327",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "Olah Data Sensor BC 0101",
+        "func": "// 1. Ambil sensorCode dari msg.payload (hasil dari node split)\nlet sensorCode = (typeof msg.payload === 'string' && msg.payload.trim() !== \"\") \n    ? msg.payload.trim() \n    : (msg.sensor_code || 'BC0101');\n\n// Simpan sensorCode ke msg agar bisa dipakai oleh Parse Json nanti\nmsg.sensor_code = sensorCode;\n\n// 2. Susun Query SQL\nmsg.topic = `\nWITH data_with_group AS (\n    SELECT\n        *,\n        CASE\n            WHEN HOUR(timestamp) >= 7 AND HOUR(timestamp) < 15 THEN 1\n            WHEN HOUR(timestamp) >= 15 AND HOUR(timestamp) < 23 THEN 2\n            ELSE 3\n        END AS group_id,\n        CASE\n            WHEN HOUR(timestamp) < 7\n                THEN DATE(timestamp - INTERVAL 1 DAY)\n            ELSE DATE(timestamp)\n        END AS production_date\n    FROM iot_slt.sensor_realtime\n    WHERE sensor_code = '${sensorCode}'\n      AND data_cycle IS NOT NULL\n),\ncycle_in_range AS (\n    SELECT DISTINCT\n        production_date,\n        group_id,\n        data_cycle\n    FROM data_with_group\n),\ndata_with_group_full AS (\n    SELECT d.*\n    FROM data_with_group d\n    INNER JOIN cycle_in_range c\n        ON d.production_date = c.production_date\n       AND d.group_id = c.group_id\n       AND d.data_cycle = c.data_cycle\n),\ncycle_data AS (\n    SELECT\n        production_date,\n        group_id,\n        data_cycle,\n        COUNT(*) AS total_data,\n        MIN(timestamp) AS first_timestamp,\n        MAX(timestamp) AS last_timestamp,\n        SUM(CASE WHEN value > 0 AND value < 15 THEN 1 ELSE 0 END) AS low_count,\n        SUM(CASE WHEN value >= 15 THEN 1 ELSE 0 END) AS high_count,\n        \n        AVG(CASE WHEN value > 0 AND value < 15 THEN value END) AS avg_low,\n        MIN(CASE WHEN value > 0 AND value < 15 THEN value END) AS min_low,\n        MAX(CASE WHEN value > 0 AND value < 15 THEN value END) AS max_low,\n\n        AVG(CASE WHEN value >= 15 AND value <= 25 THEN value END) AS avg_high,\n        MIN(CASE WHEN value >= 15 AND value <= 25 THEN value END) AS min_high,\n        MAX(CASE WHEN value >= 15 AND value <= 25 THEN value END) AS max_high\n    FROM data_with_group_full\n    GROUP BY\n        production_date,\n        group_id,\n        data_cycle\n),\nlatest_cycle AS (\n    SELECT\n        production_date,\n        group_id,\n        MAX(data_cycle) AS latest_cycle\n    FROM cycle_data\n    GROUP BY\n        production_date,\n        group_id\n),\ncycle_status AS (\n    SELECT\n        cd.*,\n        CASE\n            WHEN cd.production_date =\n                CASE\n                    WHEN HOUR(NOW()) < 7 THEN DATE(NOW() - INTERVAL 1 DAY)\n                    ELSE DATE(NOW())\n                END\n            AND cd.group_id =\n                CASE\n                    WHEN HOUR(NOW()) >= 7 AND HOUR(NOW()) < 15 THEN 1\n                    WHEN HOUR(NOW()) >= 15 AND HOUR(NOW()) < 23 THEN 2\n                    ELSE 3\n                END\n            AND cd.data_cycle = lc.latest_cycle\n            AND TIMESTAMPDIFF(SECOND, cd.last_timestamp, NOW()) <= 60\n            THEN 'PROCESS'\n\n            WHEN cd.total_data >= 34\n            THEN 'RELEASE'\n\n            ELSE 'NOT RELEASE'\n        END AS Status\n    FROM cycle_data cd\n    JOIN latest_cycle lc\n      ON cd.production_date = lc.production_date\n     AND cd.group_id = lc.group_id\n),\nfiltered_cycle AS (\n    SELECT *\n    FROM cycle_status\n    WHERE Status <> 'NOT RELEASE'\n),\nrenumbered_cycle AS (\n    SELECT\n        *,\n        ROW_NUMBER() OVER (\n            PARTITION BY production_date, group_id\n            ORDER BY data_cycle\n        ) AS display_cycle\n    FROM filtered_cycle\n)\nSELECT\n    DATE_FORMAT(production_date, '%d-%m-%Y') AS Production_Date,\n    group_id,\n    display_cycle,\n    CONCAT(group_id, '-', display_cycle) AS Cycle,\n    DATE_FORMAT(first_timestamp, '%H:%i') AS Start,\n    DATE_FORMAT(last_timestamp, '%H:%i') AS End,\n    total_data,\n    high_count,\n    low_count,\n    Status,\n    avg_low,\n    min_low,\n    max_low,\n    avg_high,\n    min_high,\n    max_high\nFROM renumbered_cycle\nORDER BY\n    production_date DESC,\n    group_id DESC,\n    display_cycle DESC;\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1040,
+        "y": 420,
+        "wires": [
+            [
+                "fab17128851465d6"
+            ]
+        ]
+    },
+    {
+        "id": "12d754e4e4b46bfa",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "Parse Json",
+        "func": "// 1. Ambil data hasil query MySQL (otomatis berada di msg.payload dari node 'read db')\nlet dbResults = msg.payload || [];\n\n// 2. Ambil data respon Directus API\nlet rawPayload = msg.directusData || {};\nlet items = [];\n\nif (rawPayload && Array.isArray(rawPayload.data)) {\n    items = rawPayload.data;\n} else if (Array.isArray(rawPayload)) {\n    items = rawPayload;\n} else if (rawPayload && typeof rawPayload.data === 'object' && rawPayload.data !== null) {\n    items = [rawPayload.data];\n}\n\n// 3. Filter CCP Directus\nlet validCcpSensors = items.filter(sensor => {\n    if (!sensor) return false;\n    let ccpVal = sensor.jenis_mesin_ccp !== undefined ? sensor.jenis_mesin_ccp : sensor.jenis_mesin_Ccp;\n    return ccpVal !== null && \n           ccpVal !== undefined && \n           String(ccpVal).trim() !== \"\" && \n           String(ccpVal).toLowerCase() !== \"null\";\n});\n\n// 4. Ekstraksi project_code dinamis dari Directus (Mendukung String \"BC\" / \"FP\")\nlet projectCodeFromApi = \"BC\"; // Default fallback string\n\nif (validCcpSensors.length > 0) {\n    let dbSensor = validCcpSensors[0];\n    \n    let extractedCode = null;\n    if (dbSensor.proses && dbSensor.proses.Kode !== undefined) {\n        extractedCode = dbSensor.proses.Kode;\n    } else if (dbSensor[\"proses.Kode\"] !== undefined) {\n        extractedCode = dbSensor[\"proses.Kode\"];\n    } else if (dbSensor.proses && typeof dbSensor.proses !== 'object') {\n        extractedCode = dbSensor.proses;\n    }\n\n    if (extractedCode !== null && extractedCode !== undefined && String(extractedCode).trim() !== \"\") {\n        projectCodeFromApi = extractedCode;\n    }\n}\n\n// 5. Jika data dari MySQL kosong / bukan array, kembalikan array kosong agar flow aman\nif (!Array.isArray(dbResults) || dbResults.length === 0) {\n    msg.payload = [];\n    return msg;\n}\n\n// Penentuan sensor_code secara dinamis\nlet sensorCode = (msg.parse1Data && msg.parse1Data.sensor_code) || msg.sensor_code || \"BC0101\";\n\n// 6. Mapping hasil DB ke Output Final Array JSON\nmsg.payload = dbResults.map(row => {\n    // Penanganan Status (\"RELEASE\", \"NOT RELEASE\", \"PROCESS\", atau null)\n    let statusValue = null;\n    if (row.Status === 'RELEASE' || row.Status === 1) {\n        statusValue = 'RELEASE';\n    } else if (row.Status === 'NOT RELEASE' || row.Status === 0) {\n        statusValue = 'NOT RELEASE';\n    } else if (row.Status === 'PROCESS') {\n        statusValue = 'PROCESS';\n    }\n\n    // Format Cycle (mengambil dari row.Cycle SQL atau menggabungkan group_id & display_cycle)\n    let cycleValue = row.Cycle || (row.group_id !== undefined && row.display_cycle !== undefined \n        ? `${row.group_id}-${row.display_cycle}` \n        : `1-${row.display_cycle || 1}`);\n\n    return {\n        project_code: String(projectCodeFromApi),\n        sensor_code: String(sensorCode),\n        production_date: row.Production_Date || row.production_date || null,\n        cycle: String(cycleValue),\n        start: row.Start || null,\n        end: row.End || null,\n        status: statusValue,\n        data: {\n            total_data: Number(row.total_data) || 0,\n            avg_low: parseFloat(row.avg_low) || 0,\n            avg_high: parseFloat(row.avg_high) || 0,\n            min_low: parseFloat(row.min_low) || 0,\n            max_low: parseFloat(row.max_low) || 0,\n            min_high: parseFloat(row.min_high) || 0,\n            max_high: parseFloat(row.max_high) || 0\n        }\n    };\n});\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1390,
+        "y": 420,
+        "wires": [
+            [
+                "47aa38709dac5dc1"
+            ]
+        ]
+    },
+    {
+        "id": "9a9bf40b9ad7603b",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "Link IoT Hub for Elec",
+        "func": "// Tentukan Method HTTP\nmsg.method = \"GET\";\n\n// Buat URL & Query Parameter Directus API\nlet baseUrl = \"http://10.68.1.220:8055/items/sensor\";\n\n// Filter HANYA berdasarkan jenis_mesin_ccp id = 1 (agar mendapatkan semua 4 sensor)\nlet filterCCPId = \"filter[jenis_mesin_ccp][id][_eq]=1\";\nlet selectFields = \"fields=*,proses.*,proses.Kode\";\n\n// Susun URL utuh tanpa filter kode_sensor\nmsg.url = `${baseUrl}?${filterCCPId}&${selectFields}`;\n\n// Set Headers\nmsg.headers = {\n    \"Authorization\": \"Bearer AZ1ByHZWlFh8GjKRGngMX-If12RnXAFP\",\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = null;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 420,
+        "wires": [
+            [
+                "4a27b75b75627b20"
+            ]
+        ]
+    },
+    {
+        "id": "4a27b75b75627b20",
+        "type": "http request",
+        "z": "6e80b4feb5e1d092",
+        "name": "Get IoT Hub",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 490,
+        "y": 420,
+        "wires": [
+            [
+                "3a409b2b0bfb8b06"
+            ]
+        ]
+    },
+    {
+        "id": "da56704714b19674",
+        "type": "split",
+        "z": "6e80b4feb5e1d092",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "property": "payload",
+        "x": 850,
+        "y": 420,
+        "wires": [
+            [
+                "44469acc4ed57327"
+            ]
+        ]
+    },
+    {
+        "id": "8d14100b03e2ec0c",
+        "type": "comment",
+        "z": "6e80b4feb5e1d092",
+        "name": "",
+        "info": "1 flow untuk get dari directus\n1 flow untuk insert ke sensor_cycle\n\n\ncara agar bisa insert otomatis \ntanpa by click\n\n\n",
+        "x": 120,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "3a409b2b0bfb8b06",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "Extract List Sensor",
+        "func": "// 1. Simpan respon asli dari Get IoT Hub (Directus API) ke msg.directusData agar tidak hilang\nmsg.directusData = msg.payload;\n\n// 2. Ambil list item dari respon API (mendukung penampungan msg.payload.data atau msg.payload)\nlet items = [];\nif (msg.payload && Array.isArray(msg.payload.data)) {\n    items = msg.payload.data;\n} else if (Array.isArray(msg.payload)) {\n    items = msg.payload;\n}\n\n// 3. Ekstrak otomatis semua sensor_code dari tiap object\nlet sensorCodes = items.map(item => {\n    // Menyesuaikan nama properti di Directus (sensor_code / kode_sensor / id / dll)\n    return item.sensor_code || item.kode_sensor || item.sensorCode || item.code;\n}).filter(code => code !== undefined && code !== null && String(code).trim() !== \"\");\n\n// 4. Hapus duplikat kode sensor jika ada\nsensorCodes = [...new Set(sensorCodes)];\n\n// 5. Masukkan array sensor_code ke msg.payload agar siap di-split oleh Node Split\nmsg.payload = sensorCodes;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 420,
+        "wires": [
+            [
+                "da56704714b19674"
+            ]
+        ]
+    },
+    {
+        "id": "47aa38709dac5dc1",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "Insert/Update DB",
+        "func": "// 1. Ambil data hasil dari Parse Json node\nlet items = msg.payload || [];\n\nif (!Array.isArray(items) || items.length === 0) {\n    node.warn(\"Tidak ada data untuk diproses.\");\n    return null; // Stop flow jika payload kosong\n}\n\n// 2. Dapatkan tanggal hari ini\nlet today = new Date();\nlet dd = String(today.getDate()).padStart(2, '0');\nlet mm = String(today.getMonth() + 1).padStart(2, '0');\nlet yyyy = today.getFullYear();\n\nlet todayDDMMYYYY = `${dd}-${mm}-${yyyy}`; // Contoh: \"19-08-2026\"\nlet todayYYYYMMDD = `${yyyy}-${mm}-${dd}`; // Format MySQL DATE\n\n// 3. Filter HANYA data yang bertanggal HARI INI\nlet todayItems = items.filter(item => {\n    if (!item.production_date) return false;\n    let pDate = String(item.production_date).trim();\n    return pDate === todayDDMMYYYY || pDate === todayYYYYMMDD;\n});\n\n// Jika tidak ada data hari ini, batalkan proses insert/update ke DB\nif (todayItems.length === 0) {\n    node.warn(`Tidak ada data untuk hari ini (${todayDDMMYYYY}). Query dibatalkan.`);\n    return null;\n}\n\n// 4. Susun Value Query SQL\nlet values = [];\n\ntodayItems.forEach(item => {\n    let projCode = item.project_code || 'BC';\n    let sensCode = item.sensor_code || 'BC0101';\n    let cycleVal = item.cycle || '1-1';\n    let statusVal = item.status || 'PROCESS';\n\n    // PERBAIKAN: Tangani start & end jika null/kosong agar menjadi NULL SQL (bukan '')\n    let startVal = (item.start && item.start !== '') ? `'${item.start}'` : 'NULL';\n    let endVal = (item.end && item.end !== '') ? `'${item.end}'` : 'NULL';\n\n    // Ubah object 'data' menjadi JSON string\n    let jsonStringData = JSON.stringify(item.data || {});\n\n    // Pastikan format tanggal ke insert_at (YYYY-MM-DD)\n    let insertAtVal = todayYYYYMMDD;\n    if (item.production_date && String(item.production_date).includes('-')) {\n        let parts = String(item.production_date).split('-');\n        if (parts[0].length === 2) {\n            insertAtVal = `${parts[2]}-${parts[1]}-${parts[0]}`;\n        } else {\n            insertAtVal = item.production_date;\n        }\n    }\n\n    // Escape tanda petik tunggal\n    let safeData = jsonStringData.replace(/'/g, \"\\\\'\");\n\n    // Masukkan ke array values (perhatikan startVal dan endVal tidak pakai petik luar lagi)\n    values.push(`(\n        '${projCode}',\n        '${sensCode}',\n        '${cycleVal}',\n        ${startVal},\n        ${endVal},\n        '${statusVal}',\n        '${safeData}',\n        '${insertAtVal}'\n    )`);\n});\n\n// 5. Query UPSERT MySQL ke tabel sensor_cycle\nmsg.topic = `\nINSERT INTO sensor_cycle (\n    project_code,\n    sensor_code,\n    cycle,\n    start,\n    end,\n    status,\n    data,\n    insert_at\n) VALUES \n${values.join(',\\n')}\nON DUPLICATE KEY UPDATE\n    start = VALUES(start),\n    end = VALUES(end),\n    status = VALUES(status),\n    data = VALUES(data);\n`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1610,
+        "y": 420,
+        "wires": [
+            [
+                "6fe79a0079c5bc10",
+                "07d9aa1c5ddaf305",
+                "218a9dbd7bdf5abc"
+            ]
+        ]
+    },
+    {
+        "id": "6fe79a0079c5bc10",
+        "type": "mysql",
+        "z": "6e80b4feb5e1d092",
+        "mydb": "dec916b40ded4a6c",
+        "name": "db",
+        "x": 1870,
+        "y": 380,
+        "wires": [
+            [
+                "b57488becbaa8a0f"
+            ]
+        ]
+    },
+    {
+        "id": "218a9dbd7bdf5abc",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "mqtt topic",
+        "func": "// 1. Ambil data hasil Parse Json\nlet items = msg.payload || [];\n\nif (!Array.isArray(items) || items.length === 0) {\n    node.warn(\"Tidak ada data untuk dikirim ke MQTT.\");\n    return null;\n}\n\n// 2. Tentukan plant_code dinamis (bisa diambil dari Directus API jika ada, atau default 'SLT')\nlet rawPayload = msg.directusData || {};\nlet plantCode = \"SLT\"; // Default fallback plant code\n\nif (Array.isArray(rawPayload.data) && rawPayload.data.length > 0) {\n    let firstSensor = rawPayload.data[0];\n    if (firstSensor.plant && firstSensor.plant.code) {\n        plantCode = firstSensor.plant.code;\n    } else if (firstSensor.plant_code) {\n        plantCode = firstSensor.plant_code;\n    }\n}\n\n// 3. Loop tiap item dan kirim sebagai pesan terpisah ke MQTT\nlet outMessages = [];\n\nitems.forEach(item => {\n    let sensorCode = item.sensor_code || \"BC0101\";\n\n    // Susun topik dinamis: ccp/baking/{plant_code}/{sensor_code}\n    let dynamicTopic = `ccp/baking/${plantCode.toLowerCase()}/${sensorCode.toLowerCase()}`;\n\n    // Buat pesan baru untuk MQTT\n    outMessages.push({\n        topic: dynamicTopic,\n        payload: {\n            project_code: item.project_code,\n            sensor_code: item.sensor_code,\n            production_date: item.production_date,\n            cycle: item.cycle,\n            start: item.start,\n            end: item.end,\n            status: item.status,\n            data: item.data\n        }\n    });\n});\n\n// Return array of messages agar Node-RED mengirimkannya satu per satu ke MQTT\nreturn [outMessages];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1860,
+        "y": 260,
+        "wires": [
+            [
+                "74b6c6c3234d99fc"
+            ]
+        ]
+    },
+    {
+        "id": "74b6c6c3234d99fc",
+        "type": "mqtt out",
+        "z": "6e80b4feb5e1d092",
+        "name": "",
+        "topic": "",
+        "qos": "0",
+        "retain": "true",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "95030b5bf43fa98e",
+        "x": 2030,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "d3917ec5ebd262c3",
+        "type": "http in",
+        "z": "6e80b4feb5e1d092",
+        "name": "",
+        "url": "/ccp/local/request_ccp_temp",
+        "method": "get",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 1430,
+        "y": 700,
+        "wires": [
+            [
+                "8f2faa59cf5d8b87"
+            ]
+        ]
+    },
+    {
+        "id": "8f2faa59cf5d8b87",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "Handle Query DB",
+        "func": "// Ambil query parameter dari URL\nlet params = msg.req.query || {};\nlet plant = params.plant;\nlet periode = params.periode; // Format yang diharapkan: MM-YYYY (contoh: 08-2026)\n\n// Validasi parameter\nif (!plant || !periode) {\n    msg.statusCode = 400;\n    msg.payload = {\n        status: false,\n        message: \"Query parameter 'plant' dan 'periode' (format: MM-YYYY) wajib diisi!\"\n    };\n    return [null, msg]; // Jika Anda ingin memisah error handling, atau lempar langsung ke http response\n}\n\n// Pisahkan MM dan YYYY dari parameter periode\nlet parts = periode.split(\"-\");\nif (parts.length !== 2) {\n    msg.statusCode = 400;\n    msg.payload = {\n        status: false,\n        message: \"Format periode salah! Gunakan format MM-YYYY (contoh: 08-2026)\"\n    };\n    return [null, msg];\n}\n\nlet month = parts[0];\nlet year = parts[1];\n\n// Simpan meta untuk response nanti\nmsg.apiMeta = {\n    plant: plant,\n    periode: periode\n};\n\n// Susun Query SQL untuk mengambil data sensor_cycle berdasarkan bulan & tahun\nmsg.topic = `\nSELECT \n    id,\n    project_code,\n    sensor_code,\n    cycle,\n    start,\n    end,\n    status,\n    data,\n    DATE_FORMAT(insert_at, '%Y-%m-%d') AS production_date\nFROM sensor_cycle\nWHERE \n    MONTH(insert_at) = ${parseInt(month, 10)}\n    AND YEAR(insert_at) = ${parseInt(year, 10)}\nORDER BY insert_at DESC, cycle ASC;\n`;\n\nreturn [msg, null];",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1690,
+        "y": 700,
+        "wires": [
+            [
+                "6fe79a0079c5bc10"
+            ]
+        ]
+    },
+    {
+        "id": "b57488becbaa8a0f",
+        "type": "function",
+        "z": "6e80b4feb5e1d092",
+        "name": "format response",
+        "func": "let rows = msg.payload || [];\n\n// Format output data\nlet formattedData = rows.map(row => {\n    let parsedData = {};\n    if (row.data) {\n        try {\n            parsedData = typeof row.data === 'string' ? JSON.parse(row.data) : row.data;\n        } catch (e) {\n            parsedData = row.data;\n        }\n    }\n\n    return {\n        id: row.id,\n        project_code: row.project_code,\n        sensor_code: row.sensor_code,\n        production_date: row.production_date,\n        cycle: row.cycle,\n        start: row.start,\n        end: row.end,\n        status: row.status,\n        data: parsedData\n    };\n});\n\n// Set HTTP Response Payload\nmsg.statusCode = 200;\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\n\nmsg.payload = {\n    status: true,\n    meta: msg.apiMeta || {},\n    total_records: formattedData.length,\n    data: formattedData\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2080,
+        "y": 700,
+        "wires": [
+            [
+                "7b953c484939a10e"
+            ]
+        ]
+    },
+    {
+        "id": "7b953c484939a10e",
+        "type": "http response",
+        "z": "6e80b4feb5e1d092",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 2330,
+        "y": 700,
+        "wires": []
     },
     {
         "id": "abb9824c35e440d9",
@@ -1021,20 +1912,6 @@
         "wires": [
             [
                 "db2061c66bb8655a"
-            ]
-        ]
-    },
-    {
-        "id": "db2061c66bb8655a",
-        "type": "mysql",
-        "z": "8d0798d68fe40ce6",
-        "mydb": "760765ff61568fbe",
-        "name": "database",
-        "x": 800,
-        "y": 120,
-        "wires": [
-            [
-                "ba30cf0db0f5a503"
             ]
         ]
     },
@@ -1094,5 +1971,19 @@
         "x": 1000,
         "y": 120,
         "wires": []
+    },
+    {
+        "id": "db2061c66bb8655a",
+        "type": "mysql",
+        "z": "8d0798d68fe40ce6",
+        "mydb": "760765ff61568fbe",
+        "name": "database",
+        "x": 800,
+        "y": 120,
+        "wires": [
+            [
+                "ba30cf0db0f5a503"
+            ]
+        ]
     }
 ]
